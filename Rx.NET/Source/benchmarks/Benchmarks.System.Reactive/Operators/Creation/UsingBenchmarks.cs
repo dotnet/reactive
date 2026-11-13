@@ -21,15 +21,13 @@ namespace Benchmarks.System.Reactive.Operators.Creation
         [Benchmark]
         public void Using()
         {
-            var n = N;
-            Observable.Using(static () => Disposable.Empty, _ => Observable.Range(1, n)).SubscribeConsume(Consumer);
+            Observable.Using(static () => Disposable.Empty, _ => Observable.Range(1, N)).SubscribeConsume(Consumer);
         }
 
         [Benchmark]
         public void Using_Error()
         {
-            var n = N;
-            Observable.Using(static () => Disposable.Empty, _ => FaultingSource.Faulting(n)).SubscribeConsume(Consumer);
+            Observable.Using(static () => Disposable.Empty, _ => FaultingSource.Faulting(N)).SubscribeConsume(Consumer);
         }
     }
 }

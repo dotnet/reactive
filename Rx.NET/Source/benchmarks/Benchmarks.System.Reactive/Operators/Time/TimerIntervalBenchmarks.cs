@@ -67,10 +67,9 @@ namespace Benchmarks.System.Reactive.Operators.Time
         public void Generate_Timed()
         {
             var scheduler = new HistoricalScheduler();
-            var n = N;
-            var period = TimeSpan.FromTicks(PeriodTicks);
 
-            Observable.Generate(0, i => i < n, i => i + 1, i => i, _ => period, scheduler)
+            // The condition captures only 'this' and the other selectors are static, so no display class is allocated.
+            Observable.Generate(0, i => i < N, static i => i + 1, static i => i, static _ => TimeSpan.FromTicks(PeriodTicks), scheduler)
                 .SubscribeConsume(Consumer);
 
             scheduler.Start();

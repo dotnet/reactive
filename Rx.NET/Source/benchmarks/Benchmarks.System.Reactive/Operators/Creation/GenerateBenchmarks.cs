@@ -17,8 +17,7 @@ namespace Benchmarks.System.Reactive.Operators.Creation
         [Benchmark]
         public void Generate()
         {
-            var n = N;
-            Observable.Generate(0, i => i < n, static i => i + 1, static i => i).SubscribeConsume(Consumer);
+            Observable.Generate(0, i => i < N, static i => i + 1, static i => i).SubscribeConsume(Consumer);
         }
     }
 }

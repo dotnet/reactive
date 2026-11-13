@@ -14,8 +14,10 @@ namespace Benchmarks.System.Reactive.Async.Operators.Single
 {
     /// <summary>
     /// S1 (variant sweep): the count-based tail operators keeping 16 elements. <c>TakeLast(count)</c> drains its
-    /// queue on a scheduler, so it is measured with the immediate scheduler and, in <c>_DefaultScheduler</c>, with
-    /// its default <c>TaskPoolAsyncScheduler</c>.
+    /// queue on a scheduler. <c>TakeLast</c> passes <c>ImmediateAsyncScheduler</c> explicitly;
+    /// <c>_DefaultScheduler</c> calls the overload without a scheduler, which also resolves to
+    /// <c>ImmediateAsyncScheduler</c> (<c>AsyncObserver.TakeLast(observer, count)</c>). Both rows therefore drain
+    /// inline and neither measures a task-pool hand-off; the second row covers the scheduler-less overload body.
     /// </summary>
     [BenchmarkCategory("Single")]
     public class TakeLastSkipLastBenchmarks : OperatorVariantBenchmarkBase

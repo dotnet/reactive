@@ -23,15 +23,13 @@ namespace Benchmarks.System.Reactive.Operators.StandardSequence
         [Benchmark]
         public void TakeWhile()
         {
-            var n = N;
-            Observable.Range(1, 2 * N).TakeWhile(v => v <= n).SubscribeConsume(Consumer);
+            Observable.Range(1, 2 * N).TakeWhile(v => v <= N).SubscribeConsume(Consumer);
         }
 
         [Benchmark]
         public void SkipWhile()
         {
-            var n = N;
-            Observable.Range(1, 2 * N).SkipWhile(v => v <= n).SubscribeConsume(Consumer);
+            Observable.Range(1, 2 * N).SkipWhile(v => v <= N).SubscribeConsume(Consumer);
         }
     }
 }

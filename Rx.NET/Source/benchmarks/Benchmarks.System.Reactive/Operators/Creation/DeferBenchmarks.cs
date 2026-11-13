@@ -17,8 +17,7 @@ namespace Benchmarks.System.Reactive.Operators.Creation
         [Benchmark]
         public void Defer()
         {
-            var n = N;
-            Observable.Defer(() => Observable.Range(1, n)).SubscribeConsume(Consumer);
+            Observable.Defer(() => Observable.Range(1, N)).SubscribeConsume(Consumer);
         }
     }
 }

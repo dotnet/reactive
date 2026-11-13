@@ -109,8 +109,8 @@ reading their absolute allocations.
 ## Scheduler policy
 
 Many AsyncRx operators default to `TaskPoolAsyncScheduler.Default` (`Range`, `Repeat`, `Generate`,
-`TakeLast(count)`, `ToAsyncObservable`, `ToAsync`/`Start`, every time operator). The suite does not rely
-on a default scheduler:
+`ToAsyncObservable`, `ToAsync`/`Start`, every time operator). `TakeLast(count)` is an exception: its
+scheduler-less overload drains on `ImmediateAsyncScheduler`. The suite does not rely on a default scheduler:
 
 - Every row passes a scheduler explicitly: `ImmediateAsyncScheduler.Instance`, or the virtual-time
   `TestAsyncScheduler` in temporal classes. The shared cold source `BenchmarkSources.Range(n)` therefore
@@ -119,6 +119,8 @@ on a default scheduler:
 - Rows named `_DefaultScheduler` measure the default path on purpose. There are four:
   `Range_DefaultScheduler`, `TakeLast_DefaultScheduler`, `ToAsyncObservable_DefaultScheduler` and
   `Start_Func_DefaultScheduler`. Do not add more, and do not add real-time rows.
+  `TakeLast_DefaultScheduler` runs inline, because the default for `TakeLast(count)` is the immediate
+  scheduler; it measures the scheduler-less overload, not a task-pool hand-off.
 - The default-scheduler and default-clock siblings of measured overloads are not measured. They run the
   same code as the measured overload on a different scheduler.
 - The `FromEvent` / `FromEventPattern` forms that capture the current synchronization context are not

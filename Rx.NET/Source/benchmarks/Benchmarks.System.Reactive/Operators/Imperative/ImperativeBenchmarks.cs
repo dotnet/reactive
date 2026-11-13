@@ -22,20 +22,22 @@ namespace Benchmarks.System.Reactive.Operators.Imperative
         public void For() =>
             Observable.For(Enumerable.Range(1, N), static i => Observable.Return(i)).SubscribeConsume(Consumer);
 
+        // The loop counter is a field, so the condition delegates capture only 'this' and no display class is
+        // allocated inside the measured region.
+        private int _i;
+
         [Benchmark]
         public void While()
         {
-            var i = 0;
-            var n = N;
-            Observable.While(() => i++ < n, Observable.Return(1)).SubscribeConsume(Consumer);
+            _i = 0;
+            Observable.While(() => _i++ < N, Observable.Return(1)).SubscribeConsume(Consumer);
         }
 
         [Benchmark]
         public void DoWhile()
         {
-            var i = 0;
-            var n = N;
-            Observable.DoWhile(Observable.Return(1), () => ++i < n).SubscribeConsume(Consumer);
+            _i = 0;
+            Observable.DoWhile(Observable.Return(1), () => ++_i < N).SubscribeConsume(Consumer);
         }
     }
 }

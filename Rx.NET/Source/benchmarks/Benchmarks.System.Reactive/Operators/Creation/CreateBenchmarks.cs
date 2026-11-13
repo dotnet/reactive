@@ -18,9 +18,10 @@ namespace Benchmarks.System.Reactive.Operators.Creation
         [Benchmark]
         public void Create()
         {
-            var n = N;
+            // N is hoisted inside the delegate, which then captures only 'this': no display class is allocated.
             Observable.Create<int>(observer =>
             {
+                var n = N;
                 for (var i = 0; i < n; i++)
                 {
                     observer.OnNext(i);

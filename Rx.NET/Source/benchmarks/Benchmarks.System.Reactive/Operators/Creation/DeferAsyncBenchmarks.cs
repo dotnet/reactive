@@ -18,8 +18,7 @@ namespace Benchmarks.System.Reactive.Operators.Creation
         [Benchmark]
         public void DeferAsync()
         {
-            var n = N;
-            Observable.DeferAsync(_ => Task.FromResult(Observable.Range(1, n))).SubscribeConsume(Consumer);
+            Observable.DeferAsync(_ => Task.FromResult(Observable.Range(1, N))).SubscribeConsume(Consumer);
         }
     }
 }

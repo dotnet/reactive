@@ -4,7 +4,7 @@ Compares two benchmark result sets (BenchmarkDotNet full-JSON exports) and repor
 regressions and improvements.
 
 .DESCRIPTION
-Matches benchmarks across the two folders by FullName (which includes parameter values,
+Matches benchmarks across the two folders by FullName plus job (FullName includes parameter values,
 e.g. 'SelectBenchmarks.Select(N: 1000)'). Each match is classified on mean time:
 
   - Unchanged    : |ratio - 1| <= threshold, or the two confidence intervals overlap
@@ -63,8 +63,23 @@ function Load-Results([string] $folder) {
                 $allocated = $b.Memory.BytesAllocatedPerOperation
             }
 
-            $map[$b.FullName] = [pscustomobject]@{
-                FullName  = $b.FullName
+            # FullName does not identify the job. A run with several jobs (for example
+            # '--runtimes net8.0 net10.0') has one row per job with the same FullName, so the key
+            # also carries the job, taken from DisplayInfo ('Type.Method: <job> [params]'). The random
+            # 'Job-XXXXXX' id is dropped so that the same job matches across two runs. A single
+            # default job keeps the bare FullName, so existing baselines still match.
+            $key = $b.FullName
+            if ($b.PSObject.Properties['DisplayInfo'] -and $b.DisplayInfo -match '^[^:]+:\s*(?<job>.+?)(\s*\[[^\]]*\])?$') {
+                $job = ($Matches['job'] -replace '^Job-[A-Z]+', '').Trim()
+                if ($job -and $job -ne 'DefaultJob') { $key = '{0} @ {1}' -f $b.FullName, $job }
+            }
+
+            if ($map.ContainsKey($key)) {
+                Write-Warning "Duplicate benchmark key '$key' in $folder; keeping the last result."
+            }
+
+            $map[$key] = [pscustomobject]@{
+                FullName  = $key
                 Mean      = [double]$stats.Mean
                 CiLower   = [double]$stats.ConfidenceInterval.Lower
                 CiUpper   = [double]$stats.ConfidenceInterval.Upper
