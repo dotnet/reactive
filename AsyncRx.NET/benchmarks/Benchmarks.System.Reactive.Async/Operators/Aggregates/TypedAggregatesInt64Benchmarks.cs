@@ -1,0 +1,47 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT License.
+// See the LICENSE file in the project root for more information.
+
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+
+using BenchmarkDotNet.Attributes;
+
+using Benchmarks.System.Reactive.Async.Infrastructure;
+
+namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
+{
+    /// <summary>
+    /// S1 (variant sweep): the type-specific Sum, Min, Max and Average overloads for <c>long</c>, fed from a
+    /// pre-typed <see cref="ArrayAsyncSource{T}"/> so no conversion runs in the measured region.
+    /// </summary>
+    [BenchmarkCategory("Aggregates")]
+    public class TypedAggregatesInt64Benchmarks : OperatorVariantBenchmarkBase
+    {
+        private ArrayAsyncSource<long> _source = default!;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            var items = new long[N];
+            for (var i = 0; i < items.Length; i++)
+            {
+                items[i] = i;
+            }
+
+            _source = new ArrayAsyncSource<long>(items);
+        }
+
+        [Benchmark]
+        public ValueTask Sum() => _source.Sum().SubscribeConsumeAsync(Consumer);
+
+        [Benchmark]
+        public ValueTask Min() => _source.Min().SubscribeConsumeAsync(Consumer);
+
+        [Benchmark]
+        public ValueTask Max() => _source.Max().SubscribeConsumeAsync(Consumer);
+
+        [Benchmark]
+        public ValueTask Average() => _source.Average().SubscribeConsumeAsync(Consumer);
+    }
+}

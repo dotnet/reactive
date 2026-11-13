@@ -17,9 +17,8 @@
     </Project>
   </Folder>
   <Folder Name="/Benchmarks/">
-    <Project Path="benchmarks/Benchmarks.System.Reactive/Benchmarks.System.Reactive.csproj">
-      <BuildType Project="Current Sources" />
-    </Project>
+    <Project Path="benchmarks/Benchmarks.System.Reactive/Benchmarks.System.Reactive.csproj" />
+    <Project Path="benchmarks/Rx.WorkloadHarness/Rx.WorkloadHarness.csproj" />
   </Folder>
   <Folder Name="/FrameworkIntegrations/">
     <Project Path="src/System.Reactive.MakeRefAssemblies/System.Reactive.MakeRefAssemblies.csproj">

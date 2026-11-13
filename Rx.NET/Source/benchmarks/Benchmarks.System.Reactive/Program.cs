@@ -1,46 +1,33 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using System.Reactive.Linq;
+
 using BenchmarkDotNet.Running;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-[assembly:DoNotParallelize] // Not really a test project, but the build tools think we are, and complain if we don't state our parallelization policy.
+using Benchmarks.System.Reactive.Infrastructure;
 
 namespace Benchmarks.System.Reactive
 {
     internal class Program
     {
-        private static void Main()
+        private static int Main(string[] args)
         {
             Console.WriteLine("Effective Rx-version: " + typeof(Observable).Assembly.GetName().Version);
 
-            var switcher = new BenchmarkSwitcher([
-                typeof(ZipBenchmark),
-                typeof(CombineLatestBenchmark),
-                typeof(SwitchBenchmark),
-                typeof(BufferCountBenchmark),
-                typeof(RangeBenchmark),
-                typeof(ToObservableBenchmark),
-                typeof(RepeatBenchmark),
-                typeof(ComparisonBenchmark),
-                typeof(ComparisonAsyncBenchmark),
-                typeof(ScalarScheduleBenchmark),
-                typeof(StableCompositeDisposableBenchmark),
-                typeof(SubjectBenchmark),
-                typeof(ComparisonAsyncBenchmark),
-                typeof(GroupByCompletion)
-#if (CURRENT)
-                ,typeof(AppendPrependBenchmark)
-                ,typeof(PrependVsStartWtihBenchmark)
-#endif
-            ]);
+            // Auto-discover every public, non-abstract class with [Benchmark] methods in this assembly.
+            // Profiling / runtime selection is driven by CLI args (e.g. --filter, -f/--runtimes,
+            // --profiler ETW|EP, --disasm), layered on top of the shared RxBenchmarkConfig.
+            var summaries = BenchmarkSwitcher
+                .FromAssembly(typeof(Program).Assembly)
+                .Run(args, RxBenchmarkConfig.Create());
 
-            switcher.Run();
-            Console.ReadLine();
+            // A non-zero exit code lets tools/capture-baseline.ps1 reject a run in which a benchmark failed
+            // validation, did not build, or threw, rather than keep a baseline with missing rows.
+            return summaries.Any(s => s.HasCriticalValidationErrors || s.Reports.Any(r => !r.Success)) ? 1 : 0;
         }
     }
 }
