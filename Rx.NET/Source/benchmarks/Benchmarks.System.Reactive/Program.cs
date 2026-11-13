@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 
 using BenchmarkDotNet.Running;
@@ -13,16 +14,20 @@ namespace Benchmarks.System.Reactive
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             Console.WriteLine("Effective Rx-version: " + typeof(Observable).Assembly.GetName().Version);
 
             // Auto-discover every public, non-abstract class with [Benchmark] methods in this assembly.
             // Profiling / runtime selection is driven by CLI args (e.g. --filter, -f/--runtimes,
             // --profiler ETW|EP, --disasm), layered on top of the shared RxBenchmarkConfig.
-            BenchmarkSwitcher
+            var summaries = BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)
                 .Run(args, RxBenchmarkConfig.Create());
+
+            // A non-zero exit code lets tools/capture-baseline.ps1 reject a run in which a benchmark failed
+            // validation, did not build, or threw, rather than keep a baseline with missing rows.
+            return summaries.Any(s => s.HasCriticalValidationErrors || s.Reports.Any(r => !r.Success)) ? 1 : 0;
         }
     }
 }

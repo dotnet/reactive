@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reactive.Linq;
 using System.Threading;
 
@@ -16,39 +17,48 @@ namespace Rx.WorkloadHarness
     /// cannot show. Prints its PID and runs until Ctrl+C.
     /// </summary>
     /// <remarks>
-    /// Usage: <c>dotnet run -c Release -f net10.0 -- [buffer|select|merge|groupby] [--rate-ms N]</c>.
+    /// Usage: <c>dotnet run -c Release -f net10.0 -- [buffer|select|merge|groupby] [--rate-ms N] [--seconds N]</c>.
+    /// <c>--seconds 0</c> (the default) runs until Ctrl+C.
     /// Then, in another shell: <c>dotnet-counters monitor -p &lt;pid&gt; System.Runtime</c>.
     /// </remarks>
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             var workload = args.Length > 0 && !args[0].StartsWith("--", StringComparison.Ordinal)
                 ? args[0].ToLowerInvariant()
                 : "buffer";
-            var rateMs = GetIntOption(args, "--rate-ms", 1);
-            var seconds = GetIntOption(args, "--seconds", 0); // 0 = run until Ctrl+C; > 0 = auto-stop (handy for CI/smoke runs)
+            if (!TryGetIntOption(args, "--rate-ms", 1, out var rateMs) || !TryGetIntOption(args, "--seconds", 0, out var seconds))
+            {
+                return 1;
+            }
+
             if (rateMs < 1)
             {
                 Console.Error.WriteLine("--rate-ms must be >= 1.");
-                Environment.Exit(1);
+                return 1;
             }
 
             if (seconds < 0)
             {
                 Console.Error.WriteLine("--seconds must be >= 0 (0 = run until Ctrl+C).");
-                Environment.Exit(1);
+                return 1;
+            }
+
+            if (workload is not ("buffer" or "select" or "merge" or "groupby"))
+            {
+                Console.Error.WriteLine($"Unknown workload '{workload}'. Use buffer, select, merge or groupby.");
+                return 1;
             }
 
             var period = TimeSpan.FromMilliseconds(rateMs);
+            var pipeline = BuildPipeline(workload, Observable.Interval(period));
 
             var pid = Environment.ProcessId;
             Console.WriteLine($"Rx.WorkloadHarness  PID={pid}  workload='{workload}'  rate={rateMs}ms");
             Console.WriteLine($"  dotnet-counters monitor -p {pid} System.Runtime");
             Console.WriteLine($"  dotnet-trace collect -p {pid}");
             Console.WriteLine(seconds > 0 ? $"Auto-stops after {seconds}s (or press Ctrl+C)." : "Press Ctrl+C to stop.");
-
-            var pipeline = BuildPipeline(workload, Observable.Interval(period));
 
             using var stop = new ManualResetEventSlim(false);
             Console.CancelKeyPress += (_, e) => { e.Cancel = true; stop.Set(); };
@@ -63,6 +73,7 @@ namespace Rx.WorkloadHarness
             }
 
             Console.WriteLine($"Stopped. Observed {Volatile.Read(ref observed)} notifications.");
+            return 0;
         }
 
         // A handful of representative sustained pipelines. "buffer" allocates a list per batch, which is a
@@ -72,20 +83,34 @@ namespace Rx.WorkloadHarness
             "select" => source.Select(x => x + 1).Where(x => (x & 1L) == 0L).Select(x => (object)x),
             "merge" => Observable.Merge(source, source.Select(x => x * 2), source.Select(x => x * 3)).Select(x => (object)x),
             "groupby" => source.GroupBy(x => x % 8).SelectMany(g => g.Select(x => (object)x)),
-            _ => source.Buffer(64).Select(batch => (object)batch),
+            "buffer" => source.Buffer(64).Select(batch => (object)batch),
+            _ => throw new ArgumentOutOfRangeException(nameof(workload), workload, "Unknown workload."),
         };
 
-        private static int GetIntOption(IReadOnlyList<string> args, string name, int fallback)
+        /// <summary>
+        /// Reads an integer option. Returns false (and reports the problem) when the option is given without a value
+        /// or with a value that is not an integer, rather than quietly using <paramref name="fallback"/>.
+        /// </summary>
+        private static bool TryGetIntOption(IReadOnlyList<string> args, string name, int fallback, out int value)
         {
-            for (var i = 0; i < args.Count - 1; i++)
+            value = fallback;
+            for (var i = 0; i < args.Count; i++)
             {
-                if (string.Equals(args[i], name, StringComparison.OrdinalIgnoreCase) && int.TryParse(args[i + 1], out var value))
+                if (!string.Equals(args[i], name, StringComparison.OrdinalIgnoreCase))
                 {
-                    return value;
+                    continue;
                 }
+
+                if (i + 1 < args.Count && int.TryParse(args[i + 1], NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+                {
+                    return true;
+                }
+
+                Console.Error.WriteLine($"{name} needs an integer value; got '{(i + 1 < args.Count ? args[i + 1] : "")}'.");
+                return false;
             }
 
-            return fallback;
+            return true;
         }
     }
 }

@@ -108,6 +108,11 @@ if ($LASTEXITCODE -ne 0) {
     throw "Benchmark run failed with exit code $LASTEXITCODE"
 }
 
+# A command line that BenchmarkDotNet rejects, or a filter that matches nothing, exits 0 with no reports.
+if (-not (Get-ChildItem -Path $dest -Recurse -Filter '*-report-full.json' -ErrorAction SilentlyContinue)) {
+    throw "The benchmark run wrote no *-report-full.json files under $dest. Check the filter and the extra arguments."
+}
+
 dotnet --info | Out-File -FilePath (Join-Path $dest 'dotnet-info.txt') -Encoding utf8
 
 [ordered]@{

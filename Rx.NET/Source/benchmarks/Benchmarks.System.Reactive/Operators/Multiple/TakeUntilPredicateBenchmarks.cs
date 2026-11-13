@@ -23,8 +23,7 @@ namespace Benchmarks.System.Reactive.Operators.Multiple
         [Benchmark]
         public void TakeUntil_Predicate()
         {
-            var n = N;
-            Observable.Range(1, 2 * n).TakeUntil(v => v >= n).SubscribeConsume(Consumer);
+            Observable.Range(1, 2 * N).TakeUntil(v => v >= N).SubscribeConsume(Consumer);
         }
     }
 }

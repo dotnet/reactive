@@ -33,6 +33,14 @@ namespace Benchmarks.System.Reactive.Infrastructure
         /// <summary>Fixed source inter-arrival period, in virtual ticks.</summary>
         protected const long PeriodTicks = 10;
 
+        /// <summary>
+        /// The midpoint of an <paramref name="n"/>-element timed source, in virtual ticks: half a period after element
+        /// <c>n/2 - 1</c> (which is due at <c>PeriodTicks * (n/2)</c>). The half-period offset keeps the boundary off an
+        /// element's tick, so the result does not depend on how the scheduler orders work due at the same time:
+        /// a time-based Skip drops exactly <c>n/2</c> elements and a Take keeps exactly <c>n/2</c>.
+        /// </summary>
+        protected static long MidpointTicks(int n) => PeriodTicks * (n / 2) + PeriodTicks / 2;
+
         [Params(100, 1_000, 10_000, 100_000)]
         public int N;
 

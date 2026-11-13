@@ -143,7 +143,7 @@ foreach ($name in ($baseMap.Keys | Where-Object { $candMap.ContainsKey($_) })) {
 $onlyBase = @($baseMap.Keys | Where-Object { -not $candMap.ContainsKey($_) } | Sort-Object)
 $onlyCand = @($candMap.Keys | Where-Object { -not $baseMap.ContainsKey($_) } | Sort-Object)
 
-function Format-Table([object[]] $rows) {
+function ConvertTo-MarkdownTable([object[]] $rows) {
     $lines = [System.Collections.Generic.List[string]]::new()
     $lines.Add('| Benchmark | Base Mean (ns) | Cand Mean (ns) | Ratio | ns/N (cand) | Base B/op | Cand B/op |')
     $lines.Add('|---|---:|---:|---:|---:|---:|---:|')
@@ -173,21 +173,21 @@ $report.Add('')
 $report.Add("## Regressions ($($regressions.Count))")
 $report.Add('')
 if ($regressions.Count -gt 0) {
-    $report.AddRange([string[]](Format-Table ($regressions | Sort-Object Ratio -Descending)))
+    $report.AddRange([string[]](ConvertTo-MarkdownTable ($regressions | Sort-Object Ratio -Descending)))
 } else { $report.Add('None.') }
 $report.Add('')
 
 $report.Add("## Improvements ($($improvements.Count))")
 $report.Add('')
 if ($improvements.Count -gt 0) {
-    $report.AddRange([string[]](Format-Table ($improvements | Sort-Object Ratio)))
+    $report.AddRange([string[]](ConvertTo-MarkdownTable ($improvements | Sort-Object Ratio)))
 } else { $report.Add('None.') }
 $report.Add('')
 
 $report.Add("## Allocation changes ($($allocChanges.Count))")
 $report.Add('')
 if ($allocChanges.Count -gt 0) {
-    $report.AddRange([string[]](Format-Table ($allocChanges | Sort-Object { [double]$_.CandAllocated - [double]$_.BaseAllocated } -Descending)))
+    $report.AddRange([string[]](ConvertTo-MarkdownTable ($allocChanges | Sort-Object { [double]$_.CandAllocated - [double]$_.BaseAllocated } -Descending)))
 } else { $report.Add('None.') }
 $report.Add('')
 

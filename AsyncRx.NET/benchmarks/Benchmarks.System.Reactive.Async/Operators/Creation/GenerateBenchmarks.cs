@@ -23,18 +23,16 @@ namespace Benchmarks.System.Reactive.Async.Operators.Creation
         [Benchmark]
         public ValueTask Generate()
         {
-            var n = N;
-            return AsyncObservable.Generate(0, i => i < n, static i => i + 1, static i => i, ImmediateAsyncScheduler.Instance)
+            return AsyncObservable.Generate(0, i => i < N, static i => i + 1, static i => i, ImmediateAsyncScheduler.Instance)
                 .SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Generate_Async()
         {
-            var n = N;
             return AsyncObservable.Generate(
                     0,
-                    i => new ValueTask<bool>(i < n),
+                    i => new ValueTask<bool>(i < N),
                     static i => new ValueTask<int>(i + 1),
                     static i => new ValueTask<int>(i),
                     ImmediateAsyncScheduler.Instance)

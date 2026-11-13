@@ -27,7 +27,7 @@ namespace Benchmarks.System.Reactive.Operators.Multiple
             var scheduler = new HistoricalScheduler();
             var n = N;
             var period = TimeSpan.FromTicks(PeriodTicks);
-            var trigger = Observable.Timer(TimeSpan.FromTicks(PeriodTicks * (n / 2)), scheduler);
+            var trigger = Observable.Timer(TimeSpan.FromTicks(MidpointTicks(n)), scheduler);
 
             VirtualTimeSource.Timed(scheduler, n, period)
                 .TakeUntil(trigger)

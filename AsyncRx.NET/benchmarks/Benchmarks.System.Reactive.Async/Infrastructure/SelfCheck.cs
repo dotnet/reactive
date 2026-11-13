@@ -33,7 +33,9 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 string? problem;
                 try
                 {
-                    var run = check();
+                    // On a pool thread, so that a pipeline that hangs synchronously (in the TestAsyncScheduler pump or on
+                    // ImmediateAsyncScheduler) cannot block the guard below.
+                    var run = Task.Run(check);
                     var finished = await Task.WhenAny(run, Task.Delay(Guard)).ConfigureAwait(false);
                     problem = finished == run ? await run.ConfigureAwait(false) : $"did not finish within {Guard.TotalSeconds} s";
                 }

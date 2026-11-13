@@ -26,64 +26,55 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
         [Benchmark]
         public ValueTask First_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).First(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).First(v => v == N).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask First_Predicate_Async()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).First(v => new ValueTask<bool>(v == n)).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).First(v => new ValueTask<bool>(v == N)).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask FirstOrDefault_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).FirstOrDefault(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).FirstOrDefault(v => v == N).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Last_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).Last(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).Last(v => v == N).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Last_Predicate_Async()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).Last(v => new ValueTask<bool>(v == n)).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).Last(v => new ValueTask<bool>(v == N)).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask LastOrDefault_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).LastOrDefault(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).LastOrDefault(v => v == N).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Single_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).Single(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).Single(v => v == N).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask Single_Predicate_Async()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).Single(v => new ValueTask<bool>(v == n)).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).Single(v => new ValueTask<bool>(v == N)).SubscribeConsumeAsync(Consumer);
         }
 
         [Benchmark]
         public ValueTask SingleOrDefault_Predicate()
         {
-            var n = N;
-            return BenchmarkSources.Range(n).SingleOrDefault(v => v == n).SubscribeConsumeAsync(Consumer);
+            return BenchmarkSources.Range(N).SingleOrDefault(v => v == N).SubscribeConsumeAsync(Consumer);
         }
     }
 }

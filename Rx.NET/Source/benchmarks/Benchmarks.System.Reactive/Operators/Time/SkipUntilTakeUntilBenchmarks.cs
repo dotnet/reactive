@@ -20,7 +20,7 @@ namespace Benchmarks.System.Reactive.Operators.Time
     [BenchmarkCategory("Time")]
     public class SkipUntilTakeUntilBenchmarks : TemporalBenchmarkBase
     {
-        private DateTimeOffset Midpoint => DateTimeOffset.MinValue + TimeSpan.FromTicks(PeriodTicks * (N / 2));
+        private DateTimeOffset Midpoint => DateTimeOffset.MinValue + TimeSpan.FromTicks(MidpointTicks(N));
 
         [Benchmark]
         public void SkipUntil_Time()

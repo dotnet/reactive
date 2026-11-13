@@ -1,5 +1,5 @@
 # Benchmark run outputs (results, baselines, traces) are NOT committed to the repo.
-# Keep them locally or publish them as CI artifacts. See notes/benchmark-expansion-plan.md.
+# Keep them locally or publish them as CI artifacts. See README.md.
 baselines/
 traces/
 BenchmarkDotNet.Artifacts/

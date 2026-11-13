@@ -21,7 +21,7 @@ namespace Benchmarks.System.Reactive.Operators.Time
     [BenchmarkCategory("Time")]
     public class SkipTakeTimeBenchmarks : TemporalBenchmarkBase
     {
-        private TimeSpan Midpoint => TimeSpan.FromTicks(PeriodTicks * (N / 2));
+        private TimeSpan Midpoint => TimeSpan.FromTicks(MidpointTicks(N));
 
         [Benchmark]
         public void Skip_Time()
