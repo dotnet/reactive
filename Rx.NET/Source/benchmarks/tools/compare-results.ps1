@@ -12,7 +12,14 @@ e.g. 'SelectBenchmarks.Select(N: 1000)'). Each match is classified on mean time:
   - Improvement  : candidate faster beyond the threshold and outside the noise
 
 Allocation changes (BytesAllocatedPerOperation) are reported separately - allocations are
-near-deterministic, so any change there is signal even when timing is noisy.
+near-deterministic, so a change there is signal even when timing is noisy. Rows that use the thread
+pool, timers or Task.Yield vary by a few bytes from run to run, so a change is reported only when it is
+larger than both -AllocToleranceBytes (default 4) and -AllocTolerancePercent (default 0.5) of the
+baseline.
+
+Each folder must be a capture that capture-baseline.ps1 completed: a folder whose environment.json
+status is "running" or "failed" is refused, unless -AllowIncomplete is passed. A folder without
+environment.json (not made by capture-baseline.ps1) gives a warning.
 
 Writes a markdown report (worst regression first) and prints a summary.
 
@@ -27,7 +34,10 @@ param(
     [Parameter(Mandatory)] [string] $Baseline,
     [Parameter(Mandatory)] [string] $Candidate,
     [double] $ThresholdPercent = 2.0,
-    [string] $OutFile
+    [string] $OutFile,
+    [double] $AllocToleranceBytes = 4,
+    [double] $AllocTolerancePercent = 0.5,
+    [switch] $AllowIncomplete
 )
 
 Set-StrictMode -Version Latest
@@ -36,6 +46,24 @@ $inv = [System.Globalization.CultureInfo]::InvariantCulture
 
 function Load-Results([string] $folder) {
     if (-not (Test-Path $folder)) { throw "Folder not found: $folder" }
+
+    $environmentFile = Join-Path $folder 'environment.json'
+    if (Test-Path $environmentFile) {
+        $environment = Get-Content $environmentFile -Raw | ConvertFrom-Json
+        # Captures made before the status field existed have no status; they are treated as complete.
+        if ($environment.PSObject.Properties['status'] -and $environment.status -ne 'complete') {
+            $why = if ($environment.PSObject.Properties['failure']) { ": $($environment.failure)" } else { '' }
+            if (-not $AllowIncomplete) {
+                throw "$folder is a capture with status '$($environment.status)'$why. Its results are partial. Capture it again, or pass -AllowIncomplete."
+            }
+
+            Write-Warning "$folder has status '$($environment.status)'$why; using its partial results (-AllowIncomplete)."
+        }
+    }
+    else {
+        Write-Warning "$folder has no environment.json, so it was not made by capture-baseline.ps1. Check that its runs are comparable."
+    }
+
     $files = Get-ChildItem -Path $folder -Recurse -Filter '*-report-full.json'
     if (-not $files) { throw "No *-report-full.json files under $folder" }
 
@@ -135,8 +163,12 @@ foreach ($name in ($baseMap.Keys | Where-Object { $candMap.ContainsKey($_) })) {
         $improvements.Add($row)
     }
 
-    if ($null -ne $b.Allocated -and $null -ne $c.Allocated -and $b.Allocated -ne $c.Allocated) {
-        $allocChanges.Add($row)
+    if ($null -ne $b.Allocated -and $null -ne $c.Allocated) {
+        $allocDelta = [math]::Abs([double]$c.Allocated - [double]$b.Allocated)
+        $allocLimit = [math]::Max($AllocToleranceBytes, [double]$b.Allocated * $AllocTolerancePercent / 100.0)
+        if ($allocDelta -gt $allocLimit) {
+            $allocChanges.Add($row)
+        }
     }
 }
 
@@ -167,6 +199,7 @@ $report.Add('')
 $report.Add("- **Baseline:** $Baseline")
 $report.Add("- **Candidate:** $Candidate")
 $report.Add("- **Threshold:** $ThresholdPercent% (plus confidence-interval overlap check)")
+$report.Add("- **Allocation tolerance:** more than $AllocToleranceBytes B and more than $AllocTolerancePercent% of the baseline")
 $report.Add("- Matched: $($regressions.Count + $improvements.Count + $unchanged.Count), regressions: $($regressions.Count), improvements: $($improvements.Count), unchanged: $($unchanged.Count)")
 $report.Add('')
 

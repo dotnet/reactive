@@ -82,6 +82,28 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 return o.Count == N && ReferenceEquals(o.Error, FaultingSource.BenchmarkError) ? null : Describe(o);
             });
 
+            await Check("Pump.PushPairsAsync into a Merge of two sources delivers 2 x count", async () =>
+            {
+                var a = new PushSource<int>();
+                var b = new PushSource<int>();
+                var o = new CountingAsyncObserver<int>();
+                var merged = new ArrayAsyncSource<IAsyncObservable<int>>(new IAsyncObservable<int>[] { a, b }).Merge();
+                await merged.SubscribeAsync(o);
+                await Pump.PushPairsAsync(a, b, N / 2);
+                await a.OnCompletedAsync();
+                await b.OnCompletedAsync();
+                return Expect(o, N, completed: true);
+            });
+
+            // Observers that complete asynchronously take Pump's slow paths; the interleaved order must survive them.
+            await Check("Pump.PushPairsAsync keeps the interleaved order when the observers yield", async () =>
+            {
+                var order = new List<string>();
+                await Pump.PushPairsAsync(new YieldingRecorder("a", order), new YieldingRecorder("b", order), 3);
+                var actual = string.Join(" ", order);
+                return actual == "a0 b0 a1 b1 a2 b2" ? null : $"got '{actual}'";
+            });
+
             await Check("Gated Merge of 10 sources delivers N", async () =>
             {
                 var sources = new IAsyncObservable<int>[10];
@@ -201,16 +223,16 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
             // The deadline falls half a period after element N/2 - 1: Skip drops elements 0..N/2-1, and Take keeps them.
             await Check("Virtual time: Skip(duration) at mid-timeline delivers N/2", () =>
-                Timed(static (s, sch) => s.Skip(TimeSpan.FromTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch), N - N / 2));
+                Timed(static (s, sch) => s.Skip(TimeSpan.FromTicks(VirtualTimeDriver.MidpointTicks(N, PeriodTicks)), sch), N - N / 2));
 
             await Check("Virtual time: Take(duration) at mid-timeline delivers N/2", () =>
-                Timed(static (s, sch) => s.Take(TimeSpan.FromTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch), N / 2));
+                Timed(static (s, sch) => s.Take(TimeSpan.FromTicks(VirtualTimeDriver.MidpointTicks(N, PeriodTicks)), sch), N / 2));
 
             await Check("Virtual time: SkipUntil(startTime) at mid-timeline delivers N/2", async () =>
             {
                 var o = new CountingAsyncObserver<int>();
                 await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
-                    static (s, sch, _) => s.SkipUntil(sch.Now.AddTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch));
+                    static (s, sch, _) => s.SkipUntil(sch.Now.AddTicks(VirtualTimeDriver.MidpointTicks(N, PeriodTicks)), sch));
                 return Expect(o, N - N / 2, completed: true);
             });
 
@@ -218,8 +240,37 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             {
                 var o = new CountingAsyncObserver<int>();
                 await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
-                    static (s, sch, _) => s.TakeUntil(sch.Now.AddTicks(PeriodTicks * (N / 2) + PeriodTicks / 2), sch));
+                    static (s, sch, _) => s.TakeUntil(sch.Now.AddTicks(VirtualTimeDriver.MidpointTicks(N, PeriodTicks)), sch));
                 return o.Count == N / 2 && o.Completed ? null : $"expected {N / 2}, {Describe(o)}";
+            });
+
+            // An odd element count: the shared midpoint must still fall between two elements.
+            await Check("Virtual time: Take(duration) at the midpoint of an odd count delivers count/2", async () =>
+            {
+                const int odd = N + 1;
+                var o = new CountingAsyncObserver<int>();
+                await VirtualTimeDriver.RunTimedAsync(odd, PeriodTicks, o, o.Completion, 0,
+                    static (s, sch, _) => s.Take(TimeSpan.FromTicks(VirtualTimeDriver.MidpointTicks(odd, PeriodTicks)), sch));
+                return Expect(o, odd / 2, completed: true);
+            });
+
+            // RefCountDelayBenchmarks relies on this. Completion disposes the RefCount subscription (AutoDetach), which
+            // schedules the delayed disconnect. The pump runs until no work remains, so its final clock is one delay
+            // past the last push only if the disconnect timer ran.
+            await Check("Virtual time: Publish().RefCount(delay) runs the delayed disconnect after completion", async () =>
+            {
+                TestAsyncScheduler? scheduler = null;
+                var o = new CountingAsyncObserver<int>();
+                await VirtualTimeDriver.RunTimedAsync(N, PeriodTicks, o, o.Completion, 0,
+                    (s, sch, _) =>
+                    {
+                        scheduler = sch;
+                        return s.Publish().RefCount(TimeSpan.FromTicks(PeriodTicks), sch);
+                    });
+                var expectedEnd = PeriodTicks * N + PeriodTicks; // the last push (and completion) is at PeriodTicks * N
+                return o.Count == N && o.Completed && scheduler!.Clock == expectedEnd
+                    ? null
+                    : $"{Describe(o)}, timeline ended at tick {scheduler?.Clock} (expected {expectedEnd})";
             });
 
             await Check("Virtual time: Interval(period).Take(N) delivers N", async () =>
@@ -257,5 +308,31 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         private static string Describe<T>(CountingAsyncObserver<T> o) =>
             $"got {o.Count} values, completed {o.Completed}, error {o.Error?.GetType().Name ?? "none"}";
+
+        // Records each value after yielding, so every OnNextAsync completes asynchronously.
+        private sealed class YieldingRecorder : IAsyncObserver<int>
+        {
+            private readonly string _name;
+            private readonly List<string> _order;
+
+            public YieldingRecorder(string name, List<string> order)
+            {
+                _name = name;
+                _order = order;
+            }
+
+            public async ValueTask OnNextAsync(int value)
+            {
+                await Task.Yield();
+                lock (_order)
+                {
+                    _order.Add(_name + value);
+                }
+            }
+
+            public ValueTask OnErrorAsync(Exception error) => default;
+
+            public ValueTask OnCompletedAsync() => default;
+        }
     }
 }

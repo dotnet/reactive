@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 using BenchmarkDotNet.Engines;
@@ -49,6 +50,97 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         {
             await PushAsync(target, 0, n).ConfigureAwait(false);
             await target.OnCompletedAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// The <c>SubscribeAsync</c> body of a cold source that runs to completion inside <c>SubscribeAsync</c>: pushes
+        /// <c>start..start+n-1</c> into <paramref name="observer"/>, then completes it (or, when <paramref name="error"/>
+        /// is not null, sends that error), and returns <see cref="AsyncDisposable.Nop"/>. Synchronous while the observer
+        /// completes synchronously.
+        /// </summary>
+        public static ValueTask<IAsyncDisposable> PushThenTerminateAsync(IAsyncObserver<int> observer, int start, int n, Exception? error)
+        {
+            var pushed = PushAsync(observer, start, n);
+            return pushed.IsCompletedSuccessfully ? TerminateAsync(observer, error) : SlowAsync(pushed, observer, error);
+
+            static async ValueTask<IAsyncDisposable> SlowAsync(ValueTask pushed, IAsyncObserver<int> observer, Exception? error)
+            {
+                await pushed.ConfigureAwait(false);
+                return await TerminateAsync(observer, error).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Completes <paramref name="observer"/> (or, when <paramref name="error"/> is not null, sends that error) and
+        /// returns <see cref="AsyncDisposable.Nop"/>: the end of a cold source's <c>SubscribeAsync</c>. Synchronous when
+        /// the observer completes synchronously.
+        /// </summary>
+        public static ValueTask<IAsyncDisposable> TerminateAsync<T>(IAsyncObserver<T> observer, Exception? error)
+        {
+            var terminal = error is null ? observer.OnCompletedAsync() : observer.OnErrorAsync(error);
+            return terminal.IsCompletedSuccessfully ? new ValueTask<IAsyncDisposable>(AsyncDisposable.Nop) : AwaitAsync(terminal);
+
+            static async ValueTask<IAsyncDisposable> AwaitAsync(ValueTask terminal)
+            {
+                await terminal.ConfigureAwait(false);
+                return AsyncDisposable.Nop;
+            }
+        }
+
+        /// <summary>
+        /// Pushes <c>0..count-1</c> into two sources, interleaved: each value goes into <paramref name="first"/> and then
+        /// into <paramref name="second"/>. Neither source is completed. Synchronous while both complete synchronously.
+        /// </summary>
+        public static ValueTask PushPairsAsync(IAsyncObserver<int> first, IAsyncObserver<int> second, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                var pending = first.OnNextAsync(i);
+                if (!pending.IsCompletedSuccessfully)
+                {
+                    return SlowAsync(pending, second, first, second, i, count);
+                }
+
+                pending = second.OnNextAsync(i);
+                if (!pending.IsCompletedSuccessfully)
+                {
+                    return SlowAsync(pending, null, first, second, i, count);
+                }
+            }
+
+            return default;
+
+            // 'then' is the push still owed for value 'i' (the second source), or null when value 'i' is done.
+            static async ValueTask SlowAsync(ValueTask pending, IAsyncObserver<int>? then, IAsyncObserver<int> first, IAsyncObserver<int> second, int i, int count)
+            {
+                await pending.ConfigureAwait(false);
+                if (then != null)
+                {
+                    await then.OnNextAsync(i).ConfigureAwait(false);
+                }
+
+                for (var j = i + 1; j < count; j++)
+                {
+                    await first.OnNextAsync(j).ConfigureAwait(false);
+                    await second.OnNextAsync(j).ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Subscribes the cached consuming sink to <paramref name="pipeline"/> (built over <paramref name="first"/> and
+        /// <paramref name="second"/>), pushes <c>0..count-1</c> into both sources interleaved (see
+        /// <see cref="PushPairsAsync"/>), completes <paramref name="first"/> and then <paramref name="second"/>, and waits
+        /// for the sink to terminate.
+        /// </summary>
+        public static async ValueTask RunHotPairAsync<TResult>(this IAsyncObservable<TResult> pipeline, IAsyncObserver<int> first, IAsyncObserver<int> second, int count, Consumer consumer)
+        {
+            var sink = Sinks.For<TResult>(consumer);
+            await pipeline.SubscribeAsync(sink).ConfigureAwait(false);
+            await PushPairsAsync(first, second, count).ConfigureAwait(false);
+            await first.OnCompletedAsync().ConfigureAwait(false);
+            await second.OnCompletedAsync().ConfigureAwait(false);
+            await sink.Completion.WaitAsync().ConfigureAwait(false);
         }
 
         /// <summary>

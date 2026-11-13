@@ -59,7 +59,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
 
         [Benchmark]
         public ValueTask Timeout_DateTimeOffset_Other() =>
-            RunTimedAsync(N, static (source, scheduler, n) => source.Timeout(scheduler.Now.AddTicks(PeriodTicks * (n / 2) + PeriodTicks / 2), BenchmarkSources.Return(-1), scheduler));
+            RunTimedAsync(N, static (source, scheduler, n) => source.Timeout(scheduler.Now.AddTicks(MidpointTicks(n)), BenchmarkSources.Return(-1), scheduler));
 
         [Benchmark]
         public ValueTask Timeout_Selector_NeverFires() =>

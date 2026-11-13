@@ -21,7 +21,8 @@ param(
     [string] $Framework = 'net10.0',
     [string] $Label,
     [string[]] $ExtraArgs = @(),
-    [switch] $AllowDirty
+    [switch] $AllowDirty,
+    [switch] $Force
 )
 
 Set-StrictMode -Version Latest

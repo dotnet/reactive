@@ -98,14 +98,6 @@ namespace Benchmarks.System.Reactive.Async.Operators.Lifecycle
             await subscription.DisposeAsync().ConfigureAwait(false);
         }
 
-        private async ValueTask PushPairsAsync(PushSource<int> a, PushSource<int> b)
-        {
-            var half = N / 2;
-            for (var i = 0; i < half; i++)
-            {
-                await a.OnNextAsync(i).ConfigureAwait(false);
-                await b.OnNextAsync(i).ConfigureAwait(false);
-            }
-        }
+        private ValueTask PushPairsAsync(PushSource<int> a, PushSource<int> b) => Pump.PushPairsAsync(a, b, N / 2);
     }
 }

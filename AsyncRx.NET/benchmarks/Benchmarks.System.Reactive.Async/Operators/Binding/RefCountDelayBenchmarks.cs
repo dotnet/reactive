@@ -14,12 +14,14 @@ namespace Benchmarks.System.Reactive.Async.Operators.Binding
 {
     /// <summary>
     /// S3 (temporal): <c>Publish().RefCount(disconnectDelay, scheduler)</c> over the pushed source, on the virtual-time
-    /// scheduler. The first subscriber connects; the delayed disconnect is armed on the virtual clock. Compare with
-    /// the inherited <c>Source_Baseline</c>.
+    /// scheduler. The first subscriber connects. Compare with the inherited <c>Source_Baseline</c>.
     /// </summary>
     /// <remarks>
-    /// The driver awaits termination and does not dispose the subscription, so the disconnect timer is not reached
-    /// within the timeline; the row measures the delayed-disconnect bookkeeping on connect and per element.
+    /// The row covers the whole lifecycle: connect, the per-element forwarding, and the delayed disconnect. When the
+    /// sequence completes, AutoDetach disposes the RefCount subscription, which drops the count to zero and schedules
+    /// the disconnect one delay later. The driver runs the timeline until no work remains, so that disconnect work item,
+    /// its gate and the disposal of the connection are measured too. <c>--verify</c> checks that the timeline ends one
+    /// delay after the last push.
     /// </remarks>
     [BenchmarkCategory("Binding")]
     public class RefCountDelayBenchmarks : TemporalBenchmarkBase

@@ -21,6 +21,19 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
     [BenchmarkCategory("Time")]
     public class TimerIntervalBenchmarks : TemporalBenchmarkBase
     {
+        private Func<int, bool> _belowN = default!;
+        private Func<int, ValueTask<bool>> _belowNAsync = default!;
+
+        // The Generate conditions depend on N, so they are built once here and passed to the static builders as their
+        // state: the measured region then allocates no closure or delegate for them.
+        [GlobalSetup]
+        public void Setup()
+        {
+            var n = N;
+            _belowN = i => i < n;
+            _belowNAsync = i => new ValueTask<bool>(i < n);
+        }
+
         [Benchmark]
         public ValueTask Interval_Take() =>
             RunSourceAsync(N, static (scheduler, n) => AsyncObservable.Interval(TimeSpan.FromTicks(PeriodTicks), scheduler).Take(n));
@@ -31,13 +44,13 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
 
         [Benchmark]
         public ValueTask GenerateTimed() =>
-            RunSourceAsync(N, static (scheduler, n) => AsyncObservable.Generate(0, i => i < n, static i => i + 1, static i => i, static _ => TimeSpan.FromTicks(PeriodTicks), scheduler));
+            RunSourceAsync(_belowN, static (scheduler, condition) => AsyncObservable.Generate(0, condition, static i => i + 1, static i => i, static _ => TimeSpan.FromTicks(PeriodTicks), scheduler));
 
         [Benchmark]
         public ValueTask GenerateTimed_Async() =>
-            RunSourceAsync(N, static (scheduler, n) => AsyncObservable.Generate(
+            RunSourceAsync(_belowNAsync, static (scheduler, condition) => AsyncObservable.Generate(
                 0,
-                i => new ValueTask<bool>(i < n),
+                condition,
                 static i => new ValueTask<int>(i + 1),
                 static i => new ValueTask<int>(i),
                 static _ => new ValueTask<TimeSpan>(TimeSpan.FromTicks(PeriodTicks)),

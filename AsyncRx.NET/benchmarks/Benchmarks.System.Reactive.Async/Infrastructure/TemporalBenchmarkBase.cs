@@ -36,6 +36,9 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// <summary>Fixed source inter-arrival period, in virtual ticks.</summary>
         protected const long PeriodTicks = 10;
 
+        /// <summary>The stream midpoint for <paramref name="n"/> elements; see <see cref="VirtualTimeDriver.MidpointTicks"/>.</summary>
+        protected static long MidpointTicks(int n) => VirtualTimeDriver.MidpointTicks(n, PeriodTicks);
+
         [Params(100, 1_000, 10_000)]
         public int N;
 
@@ -101,6 +104,15 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     /// </remarks>
     public static class VirtualTimeDriver
     {
+        /// <summary>
+        /// The midpoint of an <paramref name="n"/>-element timed source, in virtual ticks: half a period after element
+        /// <c>n/2 - 1</c>, which is due at <c>periodTicks * (n/2)</c>. The half-period offset keeps the boundary off an
+        /// element's tick, so the result does not depend on how the scheduler orders work due at the same time: a
+        /// time-based Skip drops exactly <c>n/2</c> elements and a Take keeps exactly <c>n/2</c>, for odd <c>n</c> too.
+        /// The Rx suite's <c>TemporalBenchmarkBase.MidpointTicks</c> uses the same formula.
+        /// </summary>
+        public static long MidpointTicks(int n, long periodTicks) => periodTicks * (n / 2) + periodTicks / 2;
+
         public static ValueTask RunTimedAsync<TState, TResult>(
             int n,
             long periodTicks,

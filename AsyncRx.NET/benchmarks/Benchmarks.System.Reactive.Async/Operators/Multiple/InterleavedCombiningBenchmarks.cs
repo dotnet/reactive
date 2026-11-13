@@ -67,21 +67,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Multiple
             return RunAsync(a.Amb(b), a, b);
         }
 
-        private async ValueTask RunAsync(IAsyncObservable<int> pipeline, PushSource<int> a, PushSource<int> b)
-        {
-            var sink = Sinks.For<int>(_consumer);
-            await pipeline.SubscribeAsync(sink).ConfigureAwait(false);
-
-            var half = N / 2;
-            for (var i = 0; i < half; i++)
-            {
-                await a.OnNextAsync(i).ConfigureAwait(false);
-                await b.OnNextAsync(i).ConfigureAwait(false);
-            }
-
-            await a.OnCompletedAsync().ConfigureAwait(false);
-            await b.OnCompletedAsync().ConfigureAwait(false);
-            await sink.Completion.WaitAsync().ConfigureAwait(false);
-        }
+        private ValueTask RunAsync(IAsyncObservable<int> pipeline, PushSource<int> a, PushSource<int> b) =>
+            pipeline.RunHotPairAsync(a, b, N / 2, _consumer);
     }
 }

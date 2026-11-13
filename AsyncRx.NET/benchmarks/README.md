@@ -159,8 +159,8 @@ These overloads are skipped on purpose:
   and the `HasObservers` getters.
 
 `Binding/RefCountDelayBenchmarks.Publish_RefCount_DisconnectDelay` measures the `RefCount` path that
-takes a disconnect delay. It never reaches the disconnect timer, because the driver does not dispose the
-subscription.
+takes a disconnect delay. It covers the whole lifecycle: when the sequence completes, the subscription is
+disposed, and the disconnect runs one delay later. `--verify` checks that the disconnect runs.
 
 ## Running
 

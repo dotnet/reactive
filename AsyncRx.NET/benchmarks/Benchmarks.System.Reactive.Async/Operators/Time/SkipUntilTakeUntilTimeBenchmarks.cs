@@ -21,10 +21,10 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
     {
         [Benchmark]
         public ValueTask SkipUntil_Time() =>
-            RunTimedAsync(N, static (source, scheduler, n) => source.SkipUntil(scheduler.Now.AddTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
+            RunTimedAsync(N, static (source, scheduler, n) => source.SkipUntil(scheduler.Now.AddTicks(MidpointTicks(n)), scheduler));
 
         [Benchmark]
         public ValueTask TakeUntil_Time() =>
-            RunTimedAsync(N, static (source, scheduler, n) => source.TakeUntil(scheduler.Now.AddTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
+            RunTimedAsync(N, static (source, scheduler, n) => source.TakeUntil(scheduler.Now.AddTicks(MidpointTicks(n)), scheduler));
     }
 }

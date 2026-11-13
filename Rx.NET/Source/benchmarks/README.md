@@ -103,14 +103,20 @@ tools\compare-results.ps1 -Baseline baselines\2026-07-01-abc1234 -Candidate base
 `capture-baseline.ps1` runs the suite, stamps results into `baselines/<date>-<shortsha>[-label]/results/`
 (full JSON + GitHub markdown + CSV per class), and records the environment (commit, branch,
 `dotnet --info`) alongside. `environment.json` also records the active Windows power plan
-(`powerPlan`, null off Windows or if `powercfg` fails) and any `DOTNET_Tiered*` /
-`DOTNET_ReadyToRun` / `COMPlus_Tiered*` variables that were set (`runtimeEnvironment`). Check these
-match before trusting a comparison. It refuses to stamp a dirty working tree unless `-AllowDirty` is passed.
+(`powerPlan`, null off Windows or if `powercfg` fails) and any runtime settings that change tiering, PGO,
+ReadyToRun use or the GC (`DOTNET_` or `COMPlus_` followed by `Tiered`, `TC_`, `ReadyToRun`, `OSR`, `JitEnable`
+or `gc`, for example `DOTNET_gcServer`) in `runtimeEnvironment`. Check these match before trusting a comparison.
+It refuses to stamp a dirty working tree unless `-AllowDirty` is passed. It also refuses to write into a capture
+folder that already exists, so two runs are never mixed: pass `-Label` to keep both, or `-Force` to replace the old
+one. `environment.json` has a `status` of `running`, `complete` or `failed`, so a capture that stopped part of the
+way through says so.
 
 `compare-results.ps1` matches benchmarks by full name (including parameter values) across the two
 result sets, classifies each as regression / improvement / unchanged using a ratio threshold
 (default 2%) plus the reported confidence intervals, and writes a markdown report sorted
-worst-regression-first.
+worst-regression-first. It reports an allocation change only when it is larger than both 4 B and 0.5% of the
+baseline (`-AllocToleranceBytes`, `-AllocTolerancePercent`), because thread-pool and timer rows vary by a few bytes
+from run to run. It refuses a capture whose status is not `complete` unless `-AllowIncomplete` is passed.
 
 ## Workload harness (steady-state telemetry)
 

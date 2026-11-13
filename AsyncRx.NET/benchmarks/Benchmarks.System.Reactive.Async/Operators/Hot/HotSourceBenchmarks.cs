@@ -78,21 +78,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Hot
             return RunMergeAsync(merged, a, b);
         }
 
-        private async ValueTask RunMergeAsync(IAsyncObservable<int> merged, PushSource<int> a, PushSource<int> b)
-        {
-            var sink = Sinks.For<int>(_consumer);
-            await merged.SubscribeAsync(sink).ConfigureAwait(false);
-
-            var half = N / 2;
-            for (var i = 0; i < half; i++)
-            {
-                await a.OnNextAsync(i).ConfigureAwait(false);
-                await b.OnNextAsync(i).ConfigureAwait(false);
-            }
-
-            await a.OnCompletedAsync().ConfigureAwait(false);
-            await b.OnCompletedAsync().ConfigureAwait(false);
-            await sink.Completion.WaitAsync().ConfigureAwait(false);
-        }
+        private ValueTask RunMergeAsync(IAsyncObservable<int> merged, PushSource<int> a, PushSource<int> b) =>
+            merged.RunHotPairAsync(a, b, N / 2, _consumer);
     }
 }

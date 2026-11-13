@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace Benchmarks.System.Reactive.Async.Infrastructure
@@ -57,52 +56,8 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
             public ValueTask<IAsyncDisposable> SubscribeAsync(IAsyncObserver<int> observer) => Run(observer, _n, _fault);
 
-            public static ValueTask<IAsyncDisposable> Run(IAsyncObserver<int> observer, int n, bool fault)
-            {
-                for (var i = 1; i <= n; i++)
-                {
-                    var pending = observer.OnNextAsync(i);
-                    if (!pending.IsCompletedSuccessfully)
-                    {
-                        return SlowAsync(pending, observer, i + 1, n, fault);
-                    }
-                }
-
-                var terminal = fault ? observer.OnErrorAsync(BenchmarkError) : observer.OnCompletedAsync();
-                if (!terminal.IsCompletedSuccessfully)
-                {
-                    return AwaitAsync(terminal);
-                }
-
-                return new ValueTask<IAsyncDisposable>(AsyncDisposable.Nop);
-            }
-
-            private static async ValueTask<IAsyncDisposable> SlowAsync(ValueTask pending, IAsyncObserver<int> observer, int next, int n, bool fault)
-            {
-                await pending.ConfigureAwait(false);
-
-                for (var i = next; i <= n; i++)
-                {
-                    await observer.OnNextAsync(i).ConfigureAwait(false);
-                }
-
-                if (fault)
-                {
-                    await observer.OnErrorAsync(BenchmarkError).ConfigureAwait(false);
-                }
-                else
-                {
-                    await observer.OnCompletedAsync().ConfigureAwait(false);
-                }
-
-                return AsyncDisposable.Nop;
-            }
-
-            private static async ValueTask<IAsyncDisposable> AwaitAsync(ValueTask terminal)
-            {
-                await terminal.ConfigureAwait(false);
-                return AsyncDisposable.Nop;
-            }
+            public static ValueTask<IAsyncDisposable> Run(IAsyncObserver<int> observer, int n, bool fault) =>
+                Pump.PushThenTerminateAsync(observer, 1, n, fault ? BenchmarkError : null);
         }
     }
 }

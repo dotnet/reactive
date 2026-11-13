@@ -22,6 +22,17 @@ namespace Benchmarks.System.Reactive.Operators.Time
     [BenchmarkCategory("Time")]
     public class TimerIntervalBenchmarks : TemporalBenchmarkBase
     {
+        private Func<int, bool> _belowN = default!;
+
+        // The Generate_Timed condition depends on N, so it is built once here: the measured region then allocates no
+        // delegate for it.
+        [GlobalSetup]
+        public void Setup()
+        {
+            var n = N;
+            _belowN = i => i < n;
+        }
+
         [Benchmark]
         public void Interval()
         {
@@ -68,8 +79,7 @@ namespace Benchmarks.System.Reactive.Operators.Time
         {
             var scheduler = new HistoricalScheduler();
 
-            // The condition captures only 'this' and the other selectors are static, so no display class is allocated.
-            Observable.Generate(0, i => i < N, static i => i + 1, static i => i, static _ => TimeSpan.FromTicks(PeriodTicks), scheduler)
+            Observable.Generate(0, _belowN, static i => i + 1, static i => i, static _ => TimeSpan.FromTicks(PeriodTicks), scheduler)
                 .SubscribeConsume(Consumer);
 
             scheduler.Start();

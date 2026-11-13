@@ -27,11 +27,11 @@ namespace Benchmarks.System.Reactive.Async.Operators.Time
     {
         [Benchmark]
         public ValueTask Skip_Duration() =>
-            RunTimedAsync(N, static (source, scheduler, n) => source.Skip(TimeSpan.FromTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
+            RunTimedAsync(N, static (source, scheduler, n) => source.Skip(TimeSpan.FromTicks(MidpointTicks(n)), scheduler));
 
         [Benchmark]
         public ValueTask Take_Duration() =>
-            RunTimedAsync(N, static (source, scheduler, n) => source.Take(TimeSpan.FromTicks(PeriodTicks * n / 2 + PeriodTicks / 2), scheduler));
+            RunTimedAsync(N, static (source, scheduler, n) => source.Take(TimeSpan.FromTicks(MidpointTicks(n)), scheduler));
 
         [Benchmark]
         public ValueTask SkipLast_Duration() =>

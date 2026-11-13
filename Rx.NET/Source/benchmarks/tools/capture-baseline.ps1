@@ -14,6 +14,13 @@ next to that project.
 Refuses to run with uncommitted changes (the stamped commit SHA would lie about what was
 measured) unless -AllowDirty is passed.
 
+Refuses to write into a folder that already exists (a second capture on the same day and commit
+would mix two runs under one environment.json) unless -Force is passed, which deletes the old folder
+first. Use -Label to keep several captures of the same commit.
+
+environment.json carries a status: "running" while the benchmarks run, then "complete" or
+"failed". compare-results.ps1 refuses a folder whose status is not "complete".
+
 .EXAMPLE
 tools\capture-baseline.ps1 -Filter *SelectBenchmarks* -Framework net10.0
 
@@ -27,6 +34,8 @@ param(
     [string] $Label,
     [string[]] $ExtraArgs = @(),
     [switch] $AllowDirty,
+    # Replace an existing capture folder with the same name instead of refusing to run.
+    [switch] $Force,
     # Benchmark project folder. Defaults to the Benchmarks.System.Reactive project beside this tools folder.
     [string] $ProjectDir
 )
@@ -78,10 +87,11 @@ if ($isWindowsOs) {
     }
 }
 
-# Runtime knobs that change JIT tiering/PGO behaviour and therefore the numbers. Empty object if none are set.
+# Runtime settings that change JIT tiering, PGO, ReadyToRun use or the GC, and therefore the numbers. Both the
+# DOTNET_ and the legacy COMPlus_ prefixes are read. Empty object if none are set.
 $runtimeKnobs = [ordered]@{}
 Get-ChildItem env: |
-    Where-Object { $_.Name -match '^(DOTNET_Tiered|DOTNET_ReadyToRun$|COMPlus_Tiered)' } |
+    Where-Object { $_.Name -match '^(DOTNET|COMPlus)_(Tiered|TC_|ReadyToRun|OSR|JitEnable|gc)' } |
     Sort-Object Name |
     ForEach-Object { $runtimeKnobs[$_.Name] = $_.Value }
 
@@ -94,28 +104,19 @@ if ($Label) {
 }
 $dest = Join-Path (Join-Path $benchmarksRoot 'baselines') $folderName
 
-if (Test-Path (Join-Path $dest 'results')) {
-    Write-Warning "Destination $dest already has results; new results will be merged into it."
+if (Test-Path $dest) {
+    if (-not $Force) {
+        throw "Destination $dest already exists. A second capture would mix two runs under one environment.json. Pass -Label to keep both, or -Force to replace it."
+    }
+
+    Write-Warning "Replacing the existing capture in $dest (-Force)."
+    Remove-Item -Recurse -Force $dest
 }
 New-Item -ItemType Directory -Force $dest | Out-Null
 
-Write-Host "Capturing '$Filter' on $Framework at $sha ($branch) -> $dest"
-
-# BenchmarkDotNet puts logs in the artifacts root and the exported reports in results/.
-& dotnet run -c Release -f $Framework --project $project -- `
-    --filter $Filter --artifacts $dest @ExtraArgs
-if ($LASTEXITCODE -ne 0) {
-    throw "Benchmark run failed with exit code $LASTEXITCODE"
-}
-
-# A command line that BenchmarkDotNet rejects, or a filter that matches nothing, exits 0 with no reports.
-if (-not (Get-ChildItem -Path $dest -Recurse -Filter '*-report-full.json' -ErrorAction SilentlyContinue)) {
-    throw "The benchmark run wrote no *-report-full.json files under $dest. Check the filter and the extra arguments."
-}
-
-dotnet --info | Out-File -FilePath (Join-Path $dest 'dotnet-info.txt') -Encoding utf8
-
-[ordered]@{
+$environmentFile = Join-Path $dest 'environment.json'
+$environment = [ordered]@{
+    status    = 'running'
     commit    = $fullSha
     shortSha  = $sha
     branch    = $branch
@@ -128,6 +129,35 @@ dotnet --info | Out-File -FilePath (Join-Path $dest 'dotnet-info.txt') -Encoding
     os        = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     powerPlan = $powerPlan
     runtimeEnvironment = $runtimeKnobs
-} | ConvertTo-Json | Out-File -FilePath (Join-Path $dest 'environment.json') -Encoding utf8
+}
 
+function Write-Environment([string] $status, [string] $reason) {
+    $environment.status = $status
+    if ($reason) { $environment.failure = $reason }
+    $environment | ConvertTo-Json | Out-File -FilePath $environmentFile -Encoding utf8
+}
+
+# Stamped before the run, so that a folder left by a run that crashed or was stopped says so.
+Write-Environment 'running'
+dotnet --info | Out-File -FilePath (Join-Path $dest 'dotnet-info.txt') -Encoding utf8
+
+Write-Host "Capturing '$Filter' on $Framework at $sha ($branch) -> $dest"
+
+# BenchmarkDotNet puts logs in the artifacts root and the exported reports in results/.
+& dotnet run -c Release -f $Framework --project $project -- `
+    --filter $Filter --artifacts $dest @ExtraArgs
+if ($LASTEXITCODE -ne 0) {
+    $reason = "Benchmark run failed with exit code $LASTEXITCODE"
+    Write-Environment 'failed' $reason
+    throw "$reason. The partial results in $dest are marked as failed."
+}
+
+# A command line that BenchmarkDotNet rejects, or a filter that matches nothing, exits 0 with no reports.
+if (-not (Get-ChildItem -Path $dest -Recurse -Filter '*-report-full.json' -ErrorAction SilentlyContinue)) {
+    $reason = 'The benchmark run wrote no *-report-full.json files'
+    Write-Environment 'failed' $reason
+    throw "$reason under $dest. Check the filter and the extra arguments."
+}
+
+Write-Environment 'complete'
 Write-Host "Done. Results in $(Join-Path $dest 'results')"

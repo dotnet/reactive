@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Reactive.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -14,10 +15,20 @@ namespace Benchmarks.System.Reactive.Operators.Creation
     [BenchmarkCategory("Creation")]
     public class GenerateBenchmarks : OperatorBenchmarkBase
     {
+        private Func<int, bool> _belowN = default!;
+
+        // The condition depends on N, so it is built once here: the measured region then allocates no delegate for it.
+        [GlobalSetup]
+        public void Setup()
+        {
+            var n = N;
+            _belowN = i => i < n;
+        }
+
         [Benchmark]
         public void Generate()
         {
-            Observable.Generate(0, i => i < N, static i => i + 1, static i => i).SubscribeConsume(Consumer);
+            Observable.Generate(0, _belowN, static i => i + 1, static i => i).SubscribeConsume(Consumer);
         }
     }
 }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace Benchmarks.System.Reactive.Async.Infrastructure
@@ -37,15 +36,10 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 }
             }
 
-            var completed = observer.OnCompletedAsync();
-            if (!completed.IsCompletedSuccessfully)
-            {
-                return AwaitCompletedAsync(completed);
-            }
-
-            return new ValueTask<IAsyncDisposable>(AsyncDisposable.Nop);
+            return Pump.TerminateAsync(observer, null);
         }
 
+        // The element loop stays here rather than in Pump because it walks an array of T; Pump's loops push int ranges.
         private static async ValueTask<IAsyncDisposable> SlowAsync(ValueTask pending, IAsyncObserver<T> observer, T[] items, int next)
         {
             await pending.ConfigureAwait(false);
@@ -55,14 +49,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 await observer.OnNextAsync(items[i]).ConfigureAwait(false);
             }
 
-            await observer.OnCompletedAsync().ConfigureAwait(false);
-            return AsyncDisposable.Nop;
-        }
-
-        private static async ValueTask<IAsyncDisposable> AwaitCompletedAsync(ValueTask completed)
-        {
-            await completed.ConfigureAwait(false);
-            return AsyncDisposable.Nop;
+            return await Pump.TerminateAsync(observer, null).ConfigureAwait(false);
         }
     }
 }

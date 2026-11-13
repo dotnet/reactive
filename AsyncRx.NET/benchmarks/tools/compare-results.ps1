@@ -7,8 +7,10 @@ A thin wrapper over the Rx.NET suite's tools\compare-results.ps1, which is not s
 library: it matches benchmarks by full name across two folders of BenchmarkDotNet full-JSON reports.
 See that script for the classification rules.
 
-Gated AsyncRx operators pay a thread-pool hop per element, so their timings are noisier than the Rx
-suite's; consider -ThresholdPercent 5 and give more weight to the allocation columns.
+Most rows run synchronously, including the gated operators (an uncontended AsyncGate completes inline),
+so the default threshold suits them. Rows that hop to the thread pool (TaskPool, ObserveOn,
+SynchronizationContext, yielding consumers) are noisier: read their timings with a wider threshold
+(for example -ThresholdPercent 5) and give more weight to the allocation columns.
 
 .EXAMPLE
 tools\compare-results.ps1 -Baseline baselines\2026-07-01-abc1234 -Candidate baselines\2026-07-02-def5678
@@ -21,7 +23,10 @@ param(
     [Parameter(Mandatory)] [string] $Baseline,
     [Parameter(Mandatory)] [string] $Candidate,
     [double] $ThresholdPercent = 2.0,
-    [string] $OutFile
+    [string] $OutFile,
+    [double] $AllocToleranceBytes = 4,
+    [double] $AllocTolerancePercent = 0.5,
+    [switch] $AllowIncomplete
 )
 
 Set-StrictMode -Version Latest

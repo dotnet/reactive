@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Reactive.Linq;
 
 using BenchmarkDotNet.Attributes;
@@ -14,6 +15,16 @@ namespace Benchmarks.System.Reactive.Operators.StandardSequence
     [BenchmarkCategory("StandardSequence")]
     public class TakeSkipBenchmarks : OperatorBenchmarkBase
     {
+        private Func<int, bool> _upToN = default!;
+
+        // The predicate depends on N, so it is built once here: the measured region then allocates no delegate for it.
+        [GlobalSetup]
+        public void Setup()
+        {
+            var n = N;
+            _upToN = v => v <= n;
+        }
+
         [Benchmark]
         public void Take() => Observable.Range(1, 2 * N).Take(N).SubscribeConsume(Consumer);
 
@@ -23,13 +34,13 @@ namespace Benchmarks.System.Reactive.Operators.StandardSequence
         [Benchmark]
         public void TakeWhile()
         {
-            Observable.Range(1, 2 * N).TakeWhile(v => v <= N).SubscribeConsume(Consumer);
+            Observable.Range(1, 2 * N).TakeWhile(_upToN).SubscribeConsume(Consumer);
         }
 
         [Benchmark]
         public void SkipWhile()
         {
-            Observable.Range(1, 2 * N).SkipWhile(v => v <= N).SubscribeConsume(Consumer);
+            Observable.Range(1, 2 * N).SkipWhile(_upToN).SubscribeConsume(Consumer);
         }
     }
 }
