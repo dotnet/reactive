@@ -33,7 +33,7 @@ namespace Benchmarks.System.Reactive.Operators.Concurrency
     public class ScalarSchedulerBenchmarks
     {
         private readonly Consumer _consumer = new();
-        private readonly Exception _error = new InvalidOperationException("benchmark");
+        private readonly Exception _error = FaultingSource.BenchmarkError;
         private IScheduler _scheduler = default!;
         private EventLoopScheduler _eventLoop;
 

@@ -18,8 +18,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Joins
     /// <c>AsyncGate</c> per element.
     /// </summary>
     /// <remarks>
-    /// AsyncRx has no public <c>And</c> on <c>AsyncPattern&lt;T1, T2&gt;</c>, so patterns over three or more
-    /// sources cannot be built and are not measured.
+    /// Patterns over three or more sources (<c>a.And(b).And(c)</c> and longer chains) are measured in
+    /// <see cref="AndThenWhenArityBenchmarks"/>.
     /// </remarks>
     [BenchmarkCategory("Joins")]
     public class AndThenWhenBenchmarks : GatedOperatorBenchmarkBase

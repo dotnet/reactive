@@ -152,6 +152,28 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             return default;
         }
 
+        /// <summary>
+        /// For lifecycle benchmarks: as <see cref="RunTimedAsync"/>, but the source is never completed. Instead, one
+        /// period after the last push, the subscription is disposed inside the pump, so an operator's in-flight
+        /// timers are cancelled by disposal. The pump then runs until no work remains. Returns the scheduler, so a
+        /// check can read the clock: it stays at <c>periodTicks * (n + 1)</c> when disposal cancelled every timer.
+        /// </summary>
+        public static TestAsyncScheduler RunTimedThenDispose<TState, TResult>(
+            int n,
+            long periodTicks,
+            IAsyncObserver<TResult> sink,
+            TState state,
+            Func<IAsyncObservable<int>, TestAsyncScheduler, TState, IAsyncObservable<TResult>> build)
+        {
+            var scheduler = new TestAsyncScheduler();
+            var source = new PushSource<int>();
+
+            var subscription = Complete(scheduler, build(source, scheduler, state).SubscribeAsync(sink));
+            PushChain.Start(scheduler, source, null, n, periodTicks, subscription);
+            scheduler.Start();
+            return scheduler;
+        }
+
         public static ValueTask RunSourceAsync<TState, TResult>(
             IAsyncObserver<TResult> sink,
             CompletionSignal done,
@@ -178,48 +200,49 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         // Body-level operations run before the pump has run anything, so they normally complete synchronously;
         // if one does not, RunToCompletion pumps the current tick until it does.
-        private static void Complete<T>(TestAsyncScheduler scheduler, ValueTask<T> operation)
-        {
-            if (!operation.IsCompletedSuccessfully)
-            {
-                scheduler.RunToCompletion(operation).AsTask().GetAwaiter().GetResult();
-            }
-        }
+        private static T Complete<T>(TestAsyncScheduler scheduler, ValueTask<T> operation) =>
+            operation.IsCompletedSuccessfully
+                ? operation.Result
+                : scheduler.RunToCompletion(operation).AsTask().GetAwaiter().GetResult();
 
         /// <summary>
         /// Pushes 0..n-1 into one or two sources, one value every <c>period</c> ticks starting at tick
-        /// <c>period</c>, then completes them, all as scheduled work inside the pump. One instance per run; the
-        /// state-argument scheduling overloads mean no closure per step.
+        /// <c>period</c>, then completes them, all as scheduled work inside the pump. With a
+        /// <c>disposeAtEnd</c> subscription, the sources are not completed: one period after the last push the
+        /// subscription is disposed instead. One instance per run; the state-argument scheduling overloads mean no
+        /// closure per step.
         /// </summary>
         private sealed class PushChain
         {
             private readonly TestAsyncScheduler _scheduler;
             private readonly PushSource<int> _first;
             private readonly PushSource<int>? _second;
+            private readonly IAsyncDisposable? _disposeAtEnd;
             private readonly int _n;
             private readonly TimeSpan _period;
             private int _next;
 
-            private PushChain(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks)
+            private PushChain(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks, IAsyncDisposable? disposeAtEnd)
             {
                 _scheduler = scheduler;
                 _first = first;
                 _second = second;
                 _n = n;
                 _period = TimeSpan.FromTicks(periodTicks);
+                _disposeAtEnd = disposeAtEnd;
             }
 
-            public static void Start(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks)
+            public static void Start(TestAsyncScheduler scheduler, PushSource<int> first, PushSource<int>? second, int n, long periodTicks, IAsyncDisposable? disposeAtEnd = null)
             {
-                var chain = new PushChain(scheduler, first, second, n, periodTicks);
+                var chain = new PushChain(scheduler, first, second, n, periodTicks, disposeAtEnd);
                 Complete(scheduler, chain.ScheduleNext());
             }
 
-            // A zero-length run completes at tick 0; otherwise the first value arrives at tick `period`.
+            // A zero-length run ends at tick 0; otherwise the first value arrives at tick `period`.
             private ValueTask<IAsyncDisposable> ScheduleNext() =>
                 _next < _n
                     ? _scheduler.ScheduleAsync(this, _period, static (chain, _) => chain.StepAsync())
-                    : _scheduler.ScheduleAsync(this, static (chain, _) => chain.CompleteAsync());
+                    : _scheduler.ScheduleAsync(this, static (chain, _) => chain.EndAsync());
 
             private async ValueTask StepAsync()
             {
@@ -234,14 +257,24 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 {
                     await ScheduleNext().ConfigureAwait(false);
                 }
+                else if (_disposeAtEnd != null)
+                {
+                    await _scheduler.ScheduleAsync(this, _period, static (chain, _) => chain.EndAsync()).ConfigureAwait(false);
+                }
                 else
                 {
-                    await CompleteAsync().ConfigureAwait(false);
+                    await EndAsync().ConfigureAwait(false);
                 }
             }
 
-            private async ValueTask CompleteAsync()
+            private async ValueTask EndAsync()
             {
+                if (_disposeAtEnd != null)
+                {
+                    await _disposeAtEnd.DisposeAsync().ConfigureAwait(false);
+                    return;
+                }
+
                 await _first.OnCompletedAsync().ConfigureAwait(false);
                 if (_second != null)
                 {

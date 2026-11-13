@@ -133,11 +133,16 @@ $regressions = [System.Collections.Generic.List[object]]::new()
 $improvements = [System.Collections.Generic.List[object]]::new()
 $unchanged = [System.Collections.Generic.List[object]]::new()
 $allocChanges = [System.Collections.Generic.List[object]]::new()
+# Matched rows whose baseline Mean is missing or not positive: no ratio can be computed, so they are listed apart.
+$notComparable = [System.Collections.Generic.List[string]]::new()
 
 foreach ($name in ($baseMap.Keys | Where-Object { $candMap.ContainsKey($_) })) {
     $b = $baseMap[$name]
     $c = $candMap[$name]
-    if ($b.Mean -le 0) { continue }
+    if ($null -eq $b.Mean -or $null -eq $c.Mean -or $b.Mean -le 0) {
+        $notComparable.Add($name)
+        continue
+    }
 
     $ratio = $c.Mean / $b.Mean
     $ciOverlap = ($c.CiLower -le $b.CiUpper) -and ($b.CiLower -le $c.CiUpper)
@@ -200,7 +205,7 @@ $report.Add("- **Baseline:** $Baseline")
 $report.Add("- **Candidate:** $Candidate")
 $report.Add("- **Threshold:** $ThresholdPercent% (plus confidence-interval overlap check)")
 $report.Add("- **Allocation tolerance:** more than $AllocToleranceBytes B and more than $AllocTolerancePercent% of the baseline")
-$report.Add("- Matched: $($regressions.Count + $improvements.Count + $unchanged.Count), regressions: $($regressions.Count), improvements: $($improvements.Count), unchanged: $($unchanged.Count)")
+$report.Add("- Matched: $($regressions.Count + $improvements.Count + $unchanged.Count + $notComparable.Count), regressions: $($regressions.Count), improvements: $($improvements.Count), unchanged: $($unchanged.Count), not comparable: $($notComparable.Count)")
 $report.Add('')
 
 $report.Add("## Regressions ($($regressions.Count))")
@@ -224,6 +229,14 @@ if ($allocChanges.Count -gt 0) {
 } else { $report.Add('None.') }
 $report.Add('')
 
+if ($notComparable.Count -gt 0) {
+    $report.Add("## Not comparable ($($notComparable.Count))")
+    $report.Add('')
+    $report.Add('The baseline Mean of these rows is missing or not positive, so no ratio is computed.')
+    $report.Add('')
+    foreach ($name in ($notComparable | Sort-Object)) { $report.Add("- $name") }
+    $report.Add('')
+}
 if ($onlyBase.Count -gt 0) {
     $report.Add("## Only in baseline ($($onlyBase.Count))")
     $report.Add('')
@@ -243,10 +256,13 @@ if (-not $OutFile) {
 }
 $report | Out-File -FilePath $OutFile -Encoding utf8
 
-Write-Host ("Matched {0} benchmarks: {1} regressions, {2} improvements, {3} unchanged; {4} allocation changes; {5} only-in-baseline, {6} only-in-candidate." -f
-    ($regressions.Count + $improvements.Count + $unchanged.Count),
-    $regressions.Count, $improvements.Count, $unchanged.Count,
+Write-Host ("Matched {0} benchmarks: {1} regressions, {2} improvements, {3} unchanged, {4} not comparable; {5} allocation changes; {6} only-in-baseline, {7} only-in-candidate." -f
+    ($regressions.Count + $improvements.Count + $unchanged.Count + $notComparable.Count),
+    $regressions.Count, $improvements.Count, $unchanged.Count, $notComparable.Count,
     $allocChanges.Count, $onlyBase.Count, $onlyCand.Count)
+if ($notComparable.Count -gt 0) {
+    Write-Warning "$($notComparable.Count) matched benchmark(s) have a missing or non-positive baseline Mean and are listed under 'Not comparable' in the report."
+}
 Write-Host "Report: $OutFile"
 
 if ($regressions.Count -gt 0) {

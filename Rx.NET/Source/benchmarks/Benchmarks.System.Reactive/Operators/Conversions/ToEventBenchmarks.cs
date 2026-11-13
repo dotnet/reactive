@@ -55,6 +55,6 @@ namespace Benchmarks.System.Reactive.Operators.Conversions
 
         [Benchmark]
         public void EnumerableSubscribe() =>
-            Enumerable.Range(1, N).Subscribe(new ConsumingObserver<int>(Consumer));
+            Enumerable.Range(1, N).Subscribe(SinkExtensions.ConsumingObserverFor<int>(Consumer));
     }
 }

@@ -51,21 +51,6 @@ namespace Benchmarks.System.Reactive.Async.Operators.Hot
         public ValueTask SequentialReplayWindow_Scheduler_Push() =>
             PushAsync(new SequentialReplayAsyncSubject<int>(Window, ImmediateAsyncScheduler.Instance));
 
-        private async ValueTask PushAsync(IAsyncSubject<int> subject)
-        {
-            var m = M;
-            var subscriptions = new IAsyncDisposable[m];
-            for (var i = 0; i < m; i++)
-            {
-                subscriptions[i] = await subject.SubscribeNoWaitAsync(_consumer).ConfigureAwait(false);
-            }
-
-            await subject.PushAndCompleteAsync(N).ConfigureAwait(false);
-
-            for (var i = 0; i < m; i++)
-            {
-                await subscriptions[i].DisposeAsync().ConfigureAwait(false);
-            }
-        }
+        private ValueTask PushAsync(IAsyncSubject<int> subject) => Pump.PushToSubscribersAsync(subject, M, N, _consumer);
     }
 }

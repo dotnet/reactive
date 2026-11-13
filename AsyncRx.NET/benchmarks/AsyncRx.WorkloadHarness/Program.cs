@@ -31,10 +31,9 @@ namespace AsyncRx.WorkloadHarness
     {
         private static async Task<int> Main(string[] args)
         {
-            var workload = args.Length > 0 && !args[0].StartsWith("--", StringComparison.Ordinal)
-                ? args[0].ToLowerInvariant()
-                : "buffer";
-            if (!TryGetIntOption(args, "--rate-ms", 0, out var rateMs) || !TryGetIntOption(args, "--seconds", 0, out var seconds))
+            if (!TryGetWorkload(args, out var workload) ||
+                !TryGetIntOption(args, "--rate-ms", 0, out var rateMs) ||
+                !TryGetIntOption(args, "--seconds", 0, out var seconds))
             {
                 return 1;
             }
@@ -64,11 +63,19 @@ namespace AsyncRx.WorkloadHarness
             Console.WriteLine(seconds > 0 ? $"Auto-stops after {seconds}s (or press Ctrl+C)." : "Press Ctrl+C to stop.");
 
             using var stop = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) =>
+            ConsoleCancelEventHandler onCancel = (_, e) =>
             {
                 e.Cancel = true;
-                stop.Cancel();
+                try
+                {
+                    stop.Cancel();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Ctrl+C pressed while the harness shuts down.
+                }
             };
+            Console.CancelKeyPress += onCancel;
             if (seconds > 0)
             {
                 stop.CancelAfter(TimeSpan.FromSeconds(seconds));
@@ -101,6 +108,7 @@ namespace AsyncRx.WorkloadHarness
             }
 
             await subscription.DisposeAsync().ConfigureAwait(false);
+            Console.CancelKeyPress -= onCancel;
             Console.WriteLine($"Stopped. Observed {Interlocked.Read(ref observed)} notifications.");
             return 0;
         }
@@ -119,6 +127,42 @@ namespace AsyncRx.WorkloadHarness
             "buffer" => source.Buffer(64).Select(batch => (object)batch),
             _ => throw new ArgumentOutOfRangeException(nameof(workload), workload, "Unknown workload."),
         };
+
+        /// <summary>
+        /// Finds the workload name: the one argument that is neither an option nor an option's value, wherever it
+        /// appears. Returns false (and reports the problem) for an unknown option or more than one workload name.
+        /// </summary>
+        private static bool TryGetWorkload(IReadOnlyList<string> args, out string workload)
+        {
+            workload = "buffer";
+            var found = false;
+            for (var i = 0; i < args.Count; i++)
+            {
+                if (args[i].StartsWith("--", StringComparison.Ordinal))
+                {
+                    if (!string.Equals(args[i], "--rate-ms", StringComparison.OrdinalIgnoreCase) &&
+                        !string.Equals(args[i], "--seconds", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.Error.WriteLine($"Unknown option '{args[i]}'. Use --rate-ms or --seconds.");
+                        return false;
+                    }
+
+                    i++; // Skip the option's value; TryGetIntOption checks it.
+                    continue;
+                }
+
+                if (found)
+                {
+                    Console.Error.WriteLine($"More than one workload given ('{workload}' and '{args[i]}').");
+                    return false;
+                }
+
+                workload = args[i].ToLowerInvariant();
+                found = true;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Reads an integer option. Returns false (and reports the problem) when the option is given without a value

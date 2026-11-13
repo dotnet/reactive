@@ -4,6 +4,7 @@
 
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using BenchmarkDotNet.Engines;
@@ -168,14 +169,14 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// the operator terminates, so it cannot be cancelled. It pushes its remaining elements into the terminated
         /// observer, which drops them, so the work would grow with N instead of with the operator's needs.
         /// </remarks>
-        public static ValueTask RunUntilDoneAsync<TResult>(int n, Consumer consumer, Func<IAsyncObservable<int>, IAsyncObservable<TResult>> build) =>
-            RunUntilDoneAsync(n, consumer, build, static (source, b) => b(source));
+        public static ValueTask RunUntilDoneAsync<TResult>(int n, Consumer consumer, Func<IAsyncObservable<int>, IAsyncObservable<TResult>> build, bool allowErrors = false) =>
+            RunUntilDoneAsync(n, consumer, build, static (source, b) => b(source), allowErrors);
 
-        /// <inheritdoc cref="RunUntilDoneAsync{TResult}(int, Consumer, Func{IAsyncObservable{int}, IAsyncObservable{TResult}})"/>
-        public static async ValueTask RunUntilDoneAsync<TState, TResult>(int n, Consumer consumer, TState state, Func<IAsyncObservable<int>, TState, IAsyncObservable<TResult>> build)
+        /// <inheritdoc cref="RunUntilDoneAsync{TResult}(int, Consumer, Func{IAsyncObservable{int}, IAsyncObservable{TResult}}, bool)"/>
+        public static async ValueTask RunUntilDoneAsync<TState, TResult>(int n, Consumer consumer, TState state, Func<IAsyncObservable<int>, TState, IAsyncObservable<TResult>> build, bool allowErrors = false)
         {
             var source = new PushSource<int>();
-            var sink = Sinks.For<TResult>(consumer);
+            var sink = Sinks.For<TResult>(consumer, allowErrors);
             var done = sink.Completion;
             await build(source, state).SubscribeAsync(sink).ConfigureAwait(false);
 
@@ -225,6 +226,26 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             }
 
             await subscription.DisposeAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// The subject benchmarks' protocol: subscribes <paramref name="subscribers"/> stateless consuming observers to
+        /// <paramref name="subject"/>, pushes <c>0..n-1</c> into it, completes it, then disposes every subscription.
+        /// </summary>
+        public static async ValueTask PushToSubscribersAsync(IAsyncSubject<int> subject, int subscribers, int n, Consumer consumer)
+        {
+            var subscriptions = new IAsyncDisposable[subscribers];
+            for (var i = 0; i < subscribers; i++)
+            {
+                subscriptions[i] = await subject.SubscribeNoWaitAsync(consumer).ConfigureAwait(false);
+            }
+
+            await subject.PushAndCompleteAsync(n).ConfigureAwait(false);
+
+            for (var i = 0; i < subscribers; i++)
+            {
+                await subscriptions[i].DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         /// <summary>Creates <paramref name="count"/> fresh <see cref="PushSource{T}"/>s.</summary>

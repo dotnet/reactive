@@ -37,6 +37,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         private ManualResetValueTaskSourceCore<bool> _core = new() { RunContinuationsAsynchronously = true };
         private int _state;
+        private Exception? _failure;
 
         public bool IsSet => Volatile.Read(ref _state) == Signalled;
 
@@ -49,6 +50,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             }
 
             _core.Reset();
+            _failure = null;
             Volatile.Write(ref _state, Armed);
         }
 
@@ -62,10 +64,28 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         }
 
         /// <summary>
-        /// Completes when the signal is set. Returns an already-completed <see cref="ValueTask"/> when it is set
-        /// already, which is the common case for pipelines that run to completion inside <c>SubscribeAsync</c>.
+        /// Sets the signal so that <see cref="WaitAsync"/> throws <paramref name="failure"/>. Used for an error that
+        /// the benchmark does not expect, so the benchmark fails instead of measuring a short error path.
         /// </summary>
-        public ValueTask WaitAsync() => IsSet ? default : new ValueTask(this, _core.Version);
+        public void Fail(Exception failure)
+        {
+            if (Interlocked.CompareExchange(ref _state, Setting, Armed) == Armed)
+            {
+                _failure = failure;
+                _core.SetException(failure);
+                Volatile.Write(ref _state, Signalled);
+            }
+        }
+
+        /// <summary>
+        /// Completes when the signal is set, and throws if it was set by <see cref="Fail"/>. Returns an
+        /// already-completed <see cref="ValueTask"/> when it is set already, which is the common case for
+        /// pipelines that run to completion inside <c>SubscribeAsync</c>.
+        /// </summary>
+        public ValueTask WaitAsync() =>
+            IsSet
+                ? (_failure is null ? default : ValueTask.FromException(_failure))
+                : new ValueTask(this, _core.Version);
 
         void IValueTaskSource.GetResult(short token) => _core.GetResult(token);
 
@@ -76,9 +96,31 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     }
 
     /// <summary>
+    /// Thrown into a benchmark when its pipeline ends with an error that the benchmark does not expect. Without it,
+    /// a library change that made a pipeline fail early would show as a large speed-up instead of a failure.
+    /// </summary>
+    public sealed class UnexpectedBenchmarkErrorException : Exception
+    {
+        public UnexpectedBenchmarkErrorException(Exception error)
+            : base("The pipeline under test ended with an error that the benchmark does not expect: " + error.GetType().Name + ": " + error.Message +
+                   " If the row measures an error path, use FaultingSource.BenchmarkError or pass allowErrors: true.", error)
+        {
+        }
+
+        /// <summary>
+        /// True when an error is expected without an opt-in: <see cref="FaultingSource.BenchmarkError"/> is only
+        /// ever sent on purpose by the suite's own faulting sources and <c>Throw</c> rows.
+        /// </summary>
+        public static bool IsExpected(Exception error, bool allowErrors) =>
+            allowErrors || ReferenceEquals(error, FaultingSource.BenchmarkError);
+    }
+
+    /// <summary>
     /// An <see cref="IAsyncObserver{T}"/> that funnels every value into a BenchmarkDotNet <see cref="Consumer"/>, so
     /// results cannot be removed as dead code, and sets <see cref="Completion"/> when the sequence terminates.
-    /// <c>OnErrorAsync</c> consumes the error (it is not rethrown), so error-path benchmarks measure real work.
+    /// <c>OnErrorAsync</c> consumes an expected error (see <see cref="UnexpectedBenchmarkErrorException.IsExpected"/>),
+    /// so error-path benchmarks measure real work. Any other error fails <see cref="Completion"/>, so the
+    /// benchmark throws.
     /// </summary>
     /// <remarks>
     /// It implements the interface directly rather than deriving from <c>AsyncObserverBase&lt;T&gt;</c>, so the sink
@@ -92,6 +134,9 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         public CompletionSignal Completion { get; } = new();
 
+        /// <summary>When true, any error is consumed. Set by <see cref="Sinks.For{T}"/> for each subscription.</summary>
+        public bool AllowErrors { get; set; }
+
         public ValueTask OnNextAsync(T value)
         {
             _consumer.Consume(value);
@@ -101,7 +146,15 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         public ValueTask OnErrorAsync(Exception error)
         {
             _consumer.Consume(error);
-            Completion.Set();
+            if (UnexpectedBenchmarkErrorException.IsExpected(error, AllowErrors))
+            {
+                Completion.Set();
+            }
+            else
+            {
+                Completion.Fail(new UnexpectedBenchmarkErrorException(error));
+            }
+
             return default;
         }
 
@@ -118,6 +171,11 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
     /// A stateless consuming observer with no completion tracking, for subscriptions that are not awaited to
     /// termination (never-completing sources, lifecycle benchmarks that dispose mid-stream). Safe to share.
     /// </summary>
+    /// <remarks>
+    /// No row that uses it expects an error, so any error other than <see cref="FaultingSource.BenchmarkError"/>
+    /// throws <see cref="UnexpectedBenchmarkErrorException"/> to the operator that sent it, and from there to the
+    /// code that pushed the element.
+    /// </remarks>
     public sealed class ConsumeOnlyAsyncObserver<T> : IAsyncObserver<T>
     {
         private readonly Consumer _consumer;
@@ -133,6 +191,11 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         public ValueTask OnErrorAsync(Exception error)
         {
             _consumer.Consume(error);
+            if (!UnexpectedBenchmarkErrorException.IsExpected(error, allowErrors: false))
+            {
+                throw new UnexpectedBenchmarkErrorException(error);
+            }
+
             return default;
         }
 
@@ -163,7 +226,15 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         public ValueTask OnErrorAsync(Exception error)
         {
             _consumer.Consume(error);
-            Completion.Set();
+            if (UnexpectedBenchmarkErrorException.IsExpected(error, allowErrors: false))
+            {
+                Completion.Set();
+            }
+            else
+            {
+                Completion.Fail(new UnexpectedBenchmarkErrorException(error));
+            }
+
             return default;
         }
 
@@ -227,7 +298,13 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// <see cref="SinkExtensions.SubscribeNoWaitAsync{T}"/> (which uses the stateless observer) for those.
         /// The unsynchronised cache read/write is a benign race, as in the Rx suite's <c>ObserverCache</c>.
         /// </remarks>
-        public static ConsumingAsyncObserver<T> For<T>(Consumer consumer)
+        /// <param name="consumer">The consumer that receives every value.</param>
+        /// <param name="allowErrors">
+        /// True for a row that measures an error the library sends (for example <c>Single</c> over more than one
+        /// element). Otherwise only <see cref="FaultingSource.BenchmarkError"/> is consumed and any other error fails
+        /// the benchmark.
+        /// </param>
+        public static ConsumingAsyncObserver<T> For<T>(Consumer consumer, bool allowErrors = false)
         {
             var observer = Cache<T>.Last;
             if (observer == null || !observer.Wraps(consumer))
@@ -237,6 +314,7 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
             }
 
             observer.Completion.Reset();
+            observer.AllowErrors = allowErrors;
             return observer;
         }
 
@@ -267,9 +345,9 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// error). Does not dispose the subscription. Allocation-free when the pipeline runs to completion inside
         /// <c>SubscribeAsync</c>.
         /// </summary>
-        public static ValueTask SubscribeConsumeAsync<T>(this IAsyncObservable<T> source, Consumer consumer)
+        public static ValueTask SubscribeConsumeAsync<T>(this IAsyncObservable<T> source, Consumer consumer, bool allowErrors = false)
         {
-            var observer = Sinks.For<T>(consumer);
+            var observer = Sinks.For<T>(consumer, allowErrors);
             var subscribe = source.SubscribeAsync(observer);
             if (subscribe.IsCompletedSuccessfully)
             {
@@ -290,9 +368,9 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
         /// Subscribes the cached consuming observer, awaits termination, then disposes the subscription. For
         /// operators whose disposal path is part of what is being measured.
         /// </summary>
-        public static async ValueTask SubscribeConsumeDisposeAsync<T>(this IAsyncObservable<T> source, Consumer consumer)
+        public static async ValueTask SubscribeConsumeDisposeAsync<T>(this IAsyncObservable<T> source, Consumer consumer, bool allowErrors = false)
         {
-            var observer = Sinks.For<T>(consumer);
+            var observer = Sinks.For<T>(consumer, allowErrors);
             var subscription = await source.SubscribeAsync(observer).ConfigureAwait(false);
             await observer.Completion.WaitAsync().ConfigureAwait(false);
             await subscription.DisposeAsync().ConfigureAwait(false);

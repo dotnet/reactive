@@ -87,16 +87,29 @@ namespace Benchmarks.System.Reactive.Async.Operators.Lifecycle
             await connection.DisposeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Throttle on the virtual-time scheduler. The pushes run inside the pump, <see cref="ThrottlePeriodTicks"/>
+        /// apart, and the throttle window is three periods, so each push cancels the timer that the previous push
+        /// armed, and no timer ever fires. One period after the last push the subscription is disposed, which
+        /// cancels the last timer. The row includes the scheduler's cost per element; SelfCheck asserts that
+        /// nothing is emitted and no timer runs after disposal.
+        /// </summary>
         [Benchmark]
-        public async ValueTask Throttle_Dispose()
+        public ValueTask Throttle_Dispose()
         {
-            // The throttle window is far longer than the run, so the timer never fires; disposal cancels it.
-            var scheduler = new TestAsyncScheduler();
-            var source = new PushSource<int>();
-            var subscription = await source.Throttle(TimeSpan.FromTicks(long.MaxValue / 4), scheduler).SubscribeNoWaitAsync(_consumer).ConfigureAwait(false);
-            await source.PushAsync(N / 2).ConfigureAwait(false);
-            await subscription.DisposeAsync().ConfigureAwait(false);
+            VirtualTimeDriver.RunTimedThenDispose(N / 2, ThrottlePeriodTicks, Sinks.ConsumeOnly<int>(_consumer), ThrottleWindow, ThrottlePipeline);
+            return default;
         }
+
+        /// <summary>The push period of <see cref="Throttle_Dispose"/>, in virtual ticks.</summary>
+        internal const long ThrottlePeriodTicks = 10;
+
+        /// <summary>The throttle window of <see cref="Throttle_Dispose"/>: three push periods.</summary>
+        internal static readonly TimeSpan ThrottleWindow = TimeSpan.FromTicks(3 * ThrottlePeriodTicks);
+
+        /// <summary>The pipeline of <see cref="Throttle_Dispose"/>, shared with SelfCheck.</summary>
+        internal static readonly Func<IAsyncObservable<int>, TestAsyncScheduler, TimeSpan, IAsyncObservable<int>> ThrottlePipeline =
+            static (source, scheduler, window) => source.Throttle(window, scheduler);
 
         private ValueTask PushPairsAsync(PushSource<int> a, PushSource<int> b) => Pump.PushPairsAsync(a, b, N / 2);
     }

@@ -68,7 +68,10 @@ Results go to a shared BenchmarkDotNet `Consumer`. `SubscribeConsumeAsync` subsc
 pipeline runs to completion inside `SubscribeAsync`, and waits on a reusable `IValueTaskSource`
 completion signal (`CompletionSignal`) otherwise. The signal reports `IsSet` only after its result is
 set, and `Reset` waits for a `Set` in progress, so a pipeline that completes on another thread cannot
-race the next invocation. Errors are consumed, not rethrown. `MemoryDiagnoser` is applied globally,
+race the next invocation. The sinks consume only expected errors: the shared
+`FaultingSource.BenchmarkError`, or any error in a row that passes `allowErrors: true` (the `Single` rows
+that fault on purpose). Any other error makes the benchmark throw `UnexpectedBenchmarkErrorException`, so a
+library change that made a pipeline fail early shows as a failed run, not as a speed-up. `MemoryDiagnoser` is applied globally,
 with per-element `ns/N` and `B/N` columns as in the Rx suite (read large-N rows for per-element cost,
 small-N rows for per-subscription cost; for the pinned-work fan-out classes N is the inner-subscription
 count).

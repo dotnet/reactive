@@ -4,7 +4,6 @@
 
 using System;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
@@ -29,8 +28,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Async
         [GlobalSetup]
         public void Setup()
         {
-            _invoke0 = AsyncObservable.FromAsyncPattern<int>(BeginSynchronously, static _ => 1);
-            _invoke2 = AsyncObservable.FromAsyncPattern<int, int, int>(static (a, b, callback, state) => BeginSynchronously(callback, state), static _ => 3);
+            _invoke0 = AsyncObservable.FromAsyncPattern<int>(ImmediateAsyncResult.BeginSynchronously, static _ => 1);
+            _invoke2 = AsyncObservable.FromAsyncPattern<int, int, int>(static (a, b, callback, state) => ImmediateAsyncResult.BeginSynchronously(callback, state), static _ => 3);
         }
 
         [Benchmark(Baseline = true)]
@@ -38,27 +37,5 @@ namespace Benchmarks.System.Reactive.Async.Operators.Async
 
         [Benchmark]
         public ValueTask FromAsyncPattern_Arity2() => _invoke2(1, 2).SubscribeConsumeAsync(_consumer);
-
-        private static IAsyncResult BeginSynchronously(AsyncCallback callback, object? state)
-        {
-            var result = new ImmediateAsyncResult(state);
-            callback?.Invoke(result);
-            return result;
-        }
-
-        private sealed class ImmediateAsyncResult : IAsyncResult
-        {
-            private ManualResetEvent? _handle;
-
-            public ImmediateAsyncResult(object? state) => AsyncState = state;
-
-            public object? AsyncState { get; }
-
-            public WaitHandle AsyncWaitHandle => _handle ??= new ManualResetEvent(true);
-
-            public bool CompletedSynchronously => true;
-
-            public bool IsCompleted => true;
-        }
     }
 }

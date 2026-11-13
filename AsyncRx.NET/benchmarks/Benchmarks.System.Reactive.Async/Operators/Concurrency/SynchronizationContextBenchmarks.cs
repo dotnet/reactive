@@ -38,7 +38,7 @@ namespace Benchmarks.System.Reactive.Async.Operators.Concurrency
         public ValueTask SubscribeOn_SynchronizationContext() =>
             BenchmarkSources.Range(N).SubscribeOn(_scheduler).SubscribeConsumeAsync(Consumer);
 
-        private sealed class InlineSynchronizationContext : SynchronizationContext
+        internal sealed class InlineSynchronizationContext : SynchronizationContext
         {
             public override void Post(SendOrPostCallback d, object? state) => d(state);
 

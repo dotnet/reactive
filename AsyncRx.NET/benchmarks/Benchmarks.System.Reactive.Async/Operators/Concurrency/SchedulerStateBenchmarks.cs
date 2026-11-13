@@ -33,10 +33,10 @@ namespace Benchmarks.System.Reactive.Async.Operators.Concurrency
     /// one task.
     /// </para>
     /// <para>
-    /// The shared <see cref="CompletionSignal"/> cannot be used here. <c>Set</c> publishes <c>IsSet</c> before it
-    /// completes the underlying value-task source, so when <c>Set</c> runs on a pool thread, <c>WaitAsync</c> can
-    /// return early and the next iteration's <c>Reset</c> races the pool thread's <c>SetResult</c>. At N = 10,000
-    /// that fails with <c>InvalidOperationException</c> from <c>GetResult</c>.
+    /// These rows use a <see cref="SemaphoreSlim"/>, not the shared <see cref="CompletionSignal"/>. An earlier
+    /// version of the signal raced when it was set on a pool thread. The signal is now safe for that (the
+    /// task-pool <c>ObserveOn</c> rows rely on it), but the rows keep the semaphore so that their results stay
+    /// comparable with earlier baselines.
     /// </para>
     /// </remarks>
     [BenchmarkCategory("Concurrency")]

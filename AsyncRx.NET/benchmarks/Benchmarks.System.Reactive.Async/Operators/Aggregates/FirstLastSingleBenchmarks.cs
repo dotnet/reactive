@@ -14,8 +14,8 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
     /// <summary>
     /// S1: the element operators. First and FirstOrDefault stop at the first element; Last and LastOrDefault scan
     /// everything. Single and SingleOrDefault fault (more than one element) once N &gt; 1, which the consuming sink
-    /// absorbs, so those rows measure the error path for N &gt; 1. The AsyncRx <c>*Async</c> aliases forward to
-    /// these and are not measured separately.
+    /// absorbs (they pass <c>allowErrors: true</c>), so those rows measure the error path for N &gt; 1. The
+    /// AsyncRx <c>*Async</c> aliases forward to these and are not measured separately.
     /// </summary>
     /// <remarks>
     /// Design note: First, FirstOrDefault, Single and SingleOrDefault terminate before their source does, so they
@@ -45,10 +45,10 @@ namespace Benchmarks.System.Reactive.Async.Operators.Aggregates
 
         [Benchmark]
         public ValueTask Single() =>
-            Pump.RunUntilDoneAsync(N, Consumer, static s => s.Single());
+            Pump.RunUntilDoneAsync(N, Consumer, static s => s.Single(), allowErrors: true);
 
         [Benchmark]
         public ValueTask SingleOrDefault() =>
-            Pump.RunUntilDoneAsync(N, Consumer, static s => s.SingleOrDefault());
+            Pump.RunUntilDoneAsync(N, Consumer, static s => s.SingleOrDefault(), allowErrors: true);
     }
 }

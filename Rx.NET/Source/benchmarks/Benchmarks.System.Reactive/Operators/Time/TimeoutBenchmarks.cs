@@ -65,7 +65,7 @@ namespace Benchmarks.System.Reactive.Operators.Time
             // OnError(TimeoutException) — the error path — instead of firing at subscription on zero elements.
             VirtualTimeSource.Timed(scheduler, n, period).Concat(Observable.Never<int>())
                 .Timeout(timeout, scheduler)
-                .SubscribeConsume(Consumer);
+                .SubscribeConsume(Consumer, allowErrors: true);
 
             scheduler.Start();
         }

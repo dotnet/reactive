@@ -35,7 +35,11 @@ Results are consumed through a shared `Consumer` sink (defeating dead-code elimi
 pipelines block on real completion (`SubscribeBlocking`). `MemoryDiagnoser` is applied globally, so
 allocation is a first-class column everywhere, alongside per-element `ns/N` (mean time / N) and
 `B/N` (allocated bytes / N) columns for classes with an `N` parameter. `SubscribeConsume` reuses
-one observer per `Consumer`, so the sink adds no per-call allocation to the Allocated column.
+one observer per `Consumer`, so the sink adds no per-call allocation to the Allocated column. The
+sinks consume only expected errors: the shared `FaultingSource.BenchmarkError`, or any error in a row
+that passes `allowErrors: true` (such as `Timeout_Throws`). Any other error makes the benchmark throw
+`UnexpectedBenchmarkErrorException`, so a library change that made a pipeline fail early shows as a
+failed run, not as a speed-up.
 
 Classes use BenchmarkDotNet's default auto-tuned job, with one exception: `HotPullNextBenchmarks.Next`
 measures N blocking pulls against a free-running producer thread (the producer pushes until the N

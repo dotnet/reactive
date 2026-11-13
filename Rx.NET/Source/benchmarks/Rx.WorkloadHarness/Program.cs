@@ -25,10 +25,9 @@ namespace Rx.WorkloadHarness
     {
         private static int Main(string[] args)
         {
-            var workload = args.Length > 0 && !args[0].StartsWith("--", StringComparison.Ordinal)
-                ? args[0].ToLowerInvariant()
-                : "buffer";
-            if (!TryGetIntOption(args, "--rate-ms", 1, out var rateMs) || !TryGetIntOption(args, "--seconds", 0, out var seconds))
+            if (!TryGetWorkload(args, out var workload) ||
+                !TryGetIntOption(args, "--rate-ms", 1, out var rateMs) ||
+                !TryGetIntOption(args, "--seconds", 0, out var seconds))
             {
                 return 1;
             }
@@ -61,9 +60,23 @@ namespace Rx.WorkloadHarness
             Console.WriteLine(seconds > 0 ? $"Auto-stops after {seconds}s (or press Ctrl+C)." : "Press Ctrl+C to stop.");
 
             using var stop = new ManualResetEventSlim(false);
-            Console.CancelKeyPress += (_, e) => { e.Cancel = true; stop.Set(); };
+
+            // Ctrl+C or the timer can fire while the harness shuts down, after the event is disposed.
+            void Stop()
+            {
+                try
+                {
+                    stop.Set();
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+            }
+
+            ConsoleCancelEventHandler onCancel = (_, e) => { e.Cancel = true; Stop(); };
+            Console.CancelKeyPress += onCancel;
             using var autoStop = seconds > 0
-                ? new Timer(_ => stop.Set(), null, TimeSpan.FromSeconds(seconds), Timeout.InfiniteTimeSpan)
+                ? new Timer(_ => Stop(), null, TimeSpan.FromSeconds(seconds), Timeout.InfiniteTimeSpan)
                 : null;
 
             var observed = 0L;
@@ -71,6 +84,8 @@ namespace Rx.WorkloadHarness
             {
                 stop.Wait();
             }
+
+            Console.CancelKeyPress -= onCancel;
 
             Console.WriteLine($"Stopped. Observed {Volatile.Read(ref observed)} notifications.");
             return 0;
@@ -86,6 +101,42 @@ namespace Rx.WorkloadHarness
             "buffer" => source.Buffer(64).Select(batch => (object)batch),
             _ => throw new ArgumentOutOfRangeException(nameof(workload), workload, "Unknown workload."),
         };
+
+        /// <summary>
+        /// Finds the workload name: the one argument that is neither an option nor an option's value, wherever it
+        /// appears. Returns false (and reports the problem) for an unknown option or more than one workload name.
+        /// </summary>
+        private static bool TryGetWorkload(IReadOnlyList<string> args, out string workload)
+        {
+            workload = "buffer";
+            var found = false;
+            for (var i = 0; i < args.Count; i++)
+            {
+                if (args[i].StartsWith("--", StringComparison.Ordinal))
+                {
+                    if (!string.Equals(args[i], "--rate-ms", StringComparison.OrdinalIgnoreCase) &&
+                        !string.Equals(args[i], "--seconds", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.Error.WriteLine($"Unknown option '{args[i]}'. Use --rate-ms or --seconds.");
+                        return false;
+                    }
+
+                    i++; // Skip the option's value; TryGetIntOption checks it.
+                    continue;
+                }
+
+                if (found)
+                {
+                    Console.Error.WriteLine($"More than one workload given ('{workload}' and '{args[i]}').");
+                    return false;
+                }
+
+                workload = args[i].ToLowerInvariant();
+                found = true;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Reads an integer option. Returns false (and reports the problem) when the option is given without a value

@@ -21,7 +21,7 @@ namespace Benchmarks.System.Reactive.Operators.Creation
     public class ScalarCreationBenchmarks
     {
         private readonly Consumer _consumer = new();
-        private readonly Exception _error = new InvalidOperationException("benchmark");
+        private readonly Exception _error = FaultingSource.BenchmarkError;
 
         [Benchmark]
         public void Return() => Observable.Return(1).SubscribeConsume(_consumer);

@@ -7,6 +7,8 @@ using System.Reactive.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 
+using Benchmarks.System.Reactive.Infrastructure;
+
 namespace Benchmarks.System.Reactive.Operators.Joins
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace Benchmarks.System.Reactive.Operators.Joins
             var right = Observable.Range(1, N);
 
             Observable.When(left.And(right).Then(static (a, b) => a + b))
-                .Subscribe(new Infrastructure.ConsumingObserver<int>(_consumer));
+                .SubscribeConsume(_consumer);
         }
     }
 }

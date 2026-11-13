@@ -126,6 +126,25 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 return synchronous ? null : "SubscribeConsumeAsync did not complete synchronously";
             });
 
+            // Without this, a pipeline that started to fail early would be measured as a fast row.
+            await Check("Cached sink fails on an unexpected error and consumes expected ones", async () =>
+            {
+                var consumer = new BenchmarkDotNet.Engines.Consumer();
+                try
+                {
+                    await AsyncObservable.Throw<int>(new TimeoutException()).SubscribeConsumeAsync(consumer);
+                    return "an unexpected error did not throw UnexpectedBenchmarkErrorException";
+                }
+                catch (UnexpectedBenchmarkErrorException)
+                {
+                }
+
+                await AsyncObservable.Throw<int>(FaultingSource.BenchmarkError).SubscribeConsumeAsync(consumer);
+                await AsyncObservable.Throw<int>(new TimeoutException()).SubscribeConsumeAsync(consumer, allowErrors: true);
+                await BenchmarkSources.Range(N).SubscribeConsumeAsync(consumer); // the failed signal re-arms cleanly
+                return null;
+            });
+
             await Check("Cold Range(N).Zip(Range(N)) delivers N and completes", async () =>
             {
                 var o = new CountingAsyncObserver<(int, int)>();
@@ -152,6 +171,83 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 var o = new CountingAsyncObserver<int>();
                 await BenchmarkSources.Range(N).ObserveOn(ImmediateAsyncScheduler.Instance).SubscribeAwaitAsync(o, o.Completion);
                 return Expect(o, N, completed: true);
+            });
+
+            await Check("ObserveOn(TaskPoolAsyncScheduler) delivers N", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).ObserveOn(TaskPoolAsyncScheduler.Default).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("ObserveOn(SynchronizationContextAsyncScheduler) delivers N", async () =>
+            {
+                var scheduler = new SynchronizationContextAsyncScheduler(new Operators.Concurrency.SynchronizationContextBenchmarks.InlineSynchronizationContext());
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).ObserveOn(scheduler).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            // Windows of 4 opened every 8 elements: half of the elements fall in a gap between windows.
+            await Check("Gapped Window(4, 8) flattened delivers N/2", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).Window(4, 8).Merge().SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N / 2, completed: true);
+            });
+
+            await Check("Cold generated Zip of 3 sources delivers N", async () =>
+            {
+                var s = BenchmarkSources.Range(N);
+                var o = new CountingAsyncObserver<(int, int, int)>();
+                await s.Zip(s, s).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Cold Zip(IEnumerable of 4 sources) delivers N", async () =>
+            {
+                var s = BenchmarkSources.Range(N);
+                var o = new CountingAsyncObserver<int>();
+                await AsyncObservable.Zip(new List<IAsyncObservable<int>> { s, s, s, s }, static (IList<int> l) => l[0] + l[3])
+                    .SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, N, completed: true);
+            });
+
+            await Check("Early termination over a cold source: Range(N).Take(10) delivers 10", async () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                await BenchmarkSources.Range(N).Take(10).SubscribeAwaitAsync(o, o.Completion);
+                return Expect(o, 10, completed: true);
+            });
+
+            await Check("FromEvent delivers N and disposal removes the handler", async () =>
+            {
+                var host = new EventHost();
+                var o = new CountingAsyncObserver<int>();
+                var subscription = await AsyncObservable.FromEvent<int>(h => host.Value += h, h => host.Value -= h, ImmediateAsyncScheduler.Instance)
+                    .SubscribeAsync(o);
+                for (var i = 0; i < N; i++)
+                {
+                    host.Raise(i);
+                }
+
+                await subscription.DisposeAsync();
+                return o.Count == N && !host.HasHandlers ? null : $"{Describe(o)}, handler still attached {host.HasHandlers}";
+            });
+
+            await Check("FromEventPattern delivers N and disposal removes the handler", async () =>
+            {
+                var host = new EventHost();
+                var o = new CountingAsyncObserver<global::System.Reactive.EventPattern<object>>();
+                var subscription = await AsyncObservable.FromEventPattern(h => host.Plain += h, h => host.Plain -= h, ImmediateAsyncScheduler.Instance)
+                    .SubscribeAsync(o);
+                for (var i = 0; i < N; i++)
+                {
+                    host.RaisePlain();
+                }
+
+                await subscription.DisposeAsync();
+                return o.Count == N && !host.HasHandlers ? null : $"{Describe(o)}, handler still attached {host.HasHandlers}";
             });
 
             await Check("Amb(params) delivers N", async () =>
@@ -289,6 +385,21 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
                 return Expect(o, 1, completed: true);
             });
 
+            // DisposeBenchmarks.Throttle_Dispose relies on this: every push cancels the previous timer, and disposal
+            // cancels the last one, so nothing is emitted and the timeline ends at the disposal, one period after
+            // the last push. A timer that disposal did not cancel would run later and move the clock past that tick.
+            await Check("Virtual time: Throttle disposed mid-stream cancels its timer and emits nothing", () =>
+            {
+                var o = new CountingAsyncObserver<int>();
+                var period = Operators.Lifecycle.DisposeBenchmarks.ThrottlePeriodTicks;
+                var scheduler = VirtualTimeDriver.RunTimedThenDispose(N, period, o,
+                    Operators.Lifecycle.DisposeBenchmarks.ThrottleWindow, Operators.Lifecycle.DisposeBenchmarks.ThrottlePipeline);
+                var expectedEnd = period * (N + 1);
+                return Task.FromResult(o.Count == 0 && !o.Completion.IsSet && scheduler.Clock == expectedEnd
+                    ? null
+                    : $"{Describe(o)}, timeline ended at tick {scheduler.Clock} (expected {expectedEnd})");
+            });
+
             Console.WriteLine(failures == 0 ? "All checks passed." : $"{failures} check(s) failed.");
             return failures == 0 ? 0 : 1;
         }
@@ -308,6 +419,19 @@ namespace Benchmarks.System.Reactive.Async.Infrastructure
 
         private static string Describe<T>(CountingAsyncObserver<T> o) =>
             $"got {o.Count} values, completed {o.Completed}, error {o.Error?.GetType().Name ?? "none"}";
+
+        private sealed class EventHost
+        {
+            public event Action<int>? Value;
+
+            public event EventHandler? Plain;
+
+            public bool HasHandlers => Value != null || Plain != null;
+
+            public void Raise(int value) => Value?.Invoke(value);
+
+            public void RaisePlain() => Plain?.Invoke(this, EventArgs.Empty);
+        }
 
         // Records each value after yielding, so every OnNextAsync completes asynchronously.
         private sealed class YieldingRecorder : IAsyncObserver<int>
