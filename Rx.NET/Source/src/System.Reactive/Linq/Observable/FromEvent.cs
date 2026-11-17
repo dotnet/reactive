@@ -159,12 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class FromEvent<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, TEventArgs>
     {
-        private readonly Func<Action<TEventArgs>, TDelegate>? _conversion;
-
-        public FromEvent(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-            : base(addHandler, removeHandler, scheduler)
-        {
-        }
+        private readonly Func<Action<TEventArgs>, TDelegate> _conversion;
 
         public FromEvent(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
             : base(addHandler, removeHandler, scheduler)
@@ -174,18 +169,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override TDelegate GetHandler(Action<TEventArgs> onNext)
         {
-            TDelegate handler;
-
-            if (_conversion == null)
-            {
-                handler = ReflectionUtils.CreateDelegate<TDelegate>(onNext, typeof(Action<TEventArgs>).GetMethod(nameof(Action<>.Invoke))!);
-            }
-            else
-            {
-                handler = _conversion(onNext);
-            }
-
-            return handler;
+            return _conversion(onNext);
         }
     }
 
