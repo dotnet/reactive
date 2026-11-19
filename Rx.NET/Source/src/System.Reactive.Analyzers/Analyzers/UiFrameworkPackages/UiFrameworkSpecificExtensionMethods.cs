@@ -155,7 +155,7 @@ namespace System.Reactive.Analyzers.UiFrameworkPackages
             SemanticModelAnalysisContext context,
             Diagnostic diag,
             MemberAccessExpressionSyntax ma,
-            IReadOnlyList<ArgumentSyntax> arguments)
+            SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var mn = ma.Name.ToString();
             ITypeSymbol? targetType = null;

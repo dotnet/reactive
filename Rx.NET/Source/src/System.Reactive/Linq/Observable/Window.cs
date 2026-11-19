@@ -58,7 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     SetUpstream(_refCountDisposable);
                 }
 
-                private IObservable<TSource> CreateWindow()
+                private WindowObservable<TSource> CreateWindow()
                 {
                     var s = new Subject<TSource>();
                     _queue.Enqueue(s);

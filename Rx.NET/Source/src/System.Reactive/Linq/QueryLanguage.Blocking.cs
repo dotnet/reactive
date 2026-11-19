@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
             return Collect_(source, getInitialCollector, merge, getNewCollector);
         }
 
-        private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
+        private static Collect<TSource, TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
         {
             return new Collect<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
         }

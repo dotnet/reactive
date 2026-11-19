@@ -109,7 +109,7 @@ namespace System.Reactive.Concurrency
                 return ScheduleSlow(state, dueTime, action);
             }
 
-            private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            private SingleAssignmentDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
                 var timer = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 

@@ -553,7 +553,7 @@ namespace System.Reactive.Linq
 
         #region |> Helpers <|
 
-        private static IObservable<TResult> Combine<TLeft, TRight, TResult>(IObservable<TLeft> leftSource, IObservable<TRight> rightSource, Func<IObserver<TResult>, IDisposable, IDisposable, IObserver<Either<Notification<TLeft>, Notification<TRight>>>> combinerSelector)
+        private static CombineObservable<TLeft, TRight, TResult> Combine<TLeft, TRight, TResult>(IObservable<TLeft> leftSource, IObservable<TRight> rightSource, Func<IObserver<TResult>, IDisposable, IDisposable, IObserver<Either<Notification<TLeft>, Notification<TRight>>>> combinerSelector)
         {
             return new CombineObservable<TLeft, TRight, TResult>(leftSource, rightSource, combinerSelector);
         }

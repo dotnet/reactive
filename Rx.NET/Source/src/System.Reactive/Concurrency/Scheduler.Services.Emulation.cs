@@ -314,8 +314,7 @@ namespace System.Reactive.Concurrency
             var swp = scheduler.AsStopwatchProvider();
             if (swp != null)
             {
-                var spr = new SchedulePeriodicStopwatch<TState>(scheduler, state, period, action, swp);
-                return spr.Start();
+                return SchedulePeriodicStopwatch<TState>.Start(scheduler, state, period, action, swp);
             }
             else
             {
@@ -331,7 +330,7 @@ namespace System.Reactive.Concurrency
             private readonly Func<TState, TState> _action;
             private readonly IStopwatchProvider _stopwatchProvider;
 
-            public SchedulePeriodicStopwatch(IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action, IStopwatchProvider stopwatchProvider)
+            private SchedulePeriodicStopwatch(IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action, IStopwatchProvider stopwatchProvider)
             {
                 _scheduler = scheduler;
                 _period = period;
@@ -378,7 +377,15 @@ namespace System.Reactive.Concurrency
 
             private SingleAssignmentDisposableValue _task;
 
-            public IDisposable Start()
+            public static SchedulePeriodicStopwatch<TState> Start(
+                IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action, IStopwatchProvider stopwatchProvider)
+            {
+                var sw = new SchedulePeriodicStopwatch<TState>(scheduler, state, period, action, stopwatchProvider);
+                sw.Start();
+                return sw;
+            }
+
+            private void Start()
             {
                 RegisterHostLifecycleEventHandlers();
 
@@ -387,7 +394,6 @@ namespace System.Reactive.Concurrency
                 _runState = Running;
 
                 _task.Disposable = _scheduler.Schedule(this, _nextDue, static (@this, a) => @this.Tick(a));
-                return this;
             }
 
             void IDisposable.Dispose()
@@ -564,9 +570,9 @@ namespace System.Reactive.Concurrency
 
             private TState _state;
             private int _pendingTickCount;
-            private IDisposable? _cancel;
+            private SingleAssignmentDisposable? _cancel;
 
-            public IDisposable Start()
+            public SingleAssignmentDisposable Start()
             {
                 _pendingTickCount = 0;
 

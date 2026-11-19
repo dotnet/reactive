@@ -122,7 +122,7 @@ namespace System.Reactive.Linq
             return DistinctUntilChanged_(source, keySelector, comparer);
         }
 
-        private static IObservable<TSource> DistinctUntilChanged_<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        private static DistinctUntilChanged<TSource, TKey> DistinctUntilChanged_<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             return new DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
         }
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
             return new Do<TSource>.Observer(source, observer);
         }
 
-        private static IObservable<TSource> Do_<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+        private static Do<TSource>.Actions Do_<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             return new Do<TSource>.Actions(source, onNext, onError, onCompleted);
         }
@@ -353,7 +353,7 @@ namespace System.Reactive.Linq
             return TakeLast_(source, count, scheduler);
         }
 
-        private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
+        private static TakeLast<TSource>.Count TakeLast_<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
         {
             return new TakeLast<TSource>.Count(source, count, scheduler);
         }
@@ -377,7 +377,7 @@ namespace System.Reactive.Linq
             return Window_(source, count, count);
         }
 
-        private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, int count, int skip)
+        private static Window<TSource>.Count Window_<TSource>(IObservable<TSource> source, int count, int skip)
         {
             return new Window<TSource>.Count(source, count, skip);
         }

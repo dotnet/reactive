@@ -54,7 +54,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule((state, action), static (s, p) => InvokeRec1(s, p));
         }
 
-        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState>> action) tuple)
+        private static InvokeRec1State<TState> InvokeRec1<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState>> action) tuple)
         {
             var recursiveInvoker = new InvokeRec1State<TState>(scheduler, tuple.action);
             recursiveInvoker.InvokeFirst(tuple.state);
@@ -109,7 +109,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule((state, action), dueTime, static (s, p) => InvokeRec2(s, p));
         }
 
-        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, TimeSpan>> action) tuple)
+        private static InvokeRec2State<TState> InvokeRec2<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, TimeSpan>> action) tuple)
         {
             var recursiveInvoker = new InvokeRec2State<TState>(scheduler, tuple.action);
             recursiveInvoker.InvokeFirst(tuple.state);
@@ -164,7 +164,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule((state, action), dueTime, static (s, p) => InvokeRec3(s, p));
         }
 
-        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, DateTimeOffset>> action) tuple)
+        private static InvokeRec3State<TState> InvokeRec3<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, DateTimeOffset>> action) tuple)
         {
             var recursiveInvoker = new InvokeRec3State<TState>(scheduler, tuple.action);
             recursiveInvoker.InvokeFirst(tuple.state);

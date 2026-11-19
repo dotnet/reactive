@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(Multicast<TSource, TIntermediate, TResult> parent)
             {
                 IObservable<TResult> observable;
-                IConnectableObservable<TIntermediate> connectable;
+                ConnectableObservable<TSource, TIntermediate> connectable;
 
                 try
                 {
