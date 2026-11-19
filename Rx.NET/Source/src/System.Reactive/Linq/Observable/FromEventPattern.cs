@@ -17,12 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         public sealed class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
         {
-            private readonly Func<EventHandler<TEventArgs>, TDelegate>? _conversion;
-
-            public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-                : base(addHandler, removeHandler, scheduler)
-            {
-            }
+            private readonly Func<EventHandler<TEventArgs>, TDelegate> _conversion;
 
             public Impl(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
@@ -32,19 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override TDelegate GetHandler(Action<EventPattern<TEventArgs>> onNext)
             {
-                TDelegate handler;
-
-                if (_conversion == null)
-                {
-                    Action<object, TEventArgs> h = (sender, eventArgs) => onNext(new EventPattern<TEventArgs>(sender, eventArgs));
-                    handler = ReflectionUtils.CreateDelegate<TDelegate>(h, typeof(Action<object, TEventArgs>).GetMethod(nameof(Action<,>.Invoke))!);
-                }
-                else
-                {
-                    handler = _conversion((sender, eventArgs) => onNext(new EventPattern<TEventArgs>(sender, eventArgs)));
-                }
-
-                return handler;
+                return _conversion((sender, eventArgs) => onNext(new EventPattern<TEventArgs>(sender, eventArgs)));
             }
         }
 

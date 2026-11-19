@@ -61,7 +61,13 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-            return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<TDelegate, TEventArgs>(
+                static e => ReflectionUtils.CreateDelegate<TDelegate>(
+                    e,
+                    typeof(EventHandler<TEventArgs>).GetMethod(nameof(EventHandler<>.Invoke))!),
+                addHandler,
+                removeHandler,
+                scheduler);
         }
 
         #endregion
@@ -362,7 +368,13 @@ namespace System.Reactive.Linq
 
         private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-            return new FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+            return new FromEvent<TDelegate, TEventArgs>(
+                static onNext => ReflectionUtils.CreateDelegate<TDelegate>(
+                    onNext,
+                    typeof(Action<TEventArgs>).GetMethod(nameof(Action<>.Invoke))!),
+                addHandler,
+                removeHandler,
+                scheduler);
         }
 
         #endregion
