@@ -2005,10 +2005,7 @@ namespace ReactiveTests.Tests
             private set;
         }
 
-        public IQbservableProvider Provider
-        {
-            get { return new MyQbservableProvider(); }
-        }
+        public IQbservableProvider Provider { get; } = new MyQbservableProvider();
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
@@ -2047,10 +2044,7 @@ namespace ReactiveTests.Tests
             private set;
         }
 
-        public IQbservableProvider Provider
-        {
-            get { return new MyQbservableQueryableProvider(); }
-        }
+        public IQbservableProvider Provider { get; } = new MyQbservableQueryableProvider();
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
@@ -2091,10 +2085,7 @@ namespace ReactiveTests.Tests
             get { return typeof(T); }
         }
 
-        IQueryProvider IQueryable.Provider
-        {
-            get { return new MyQbservableQueryableProvider(); }
-        }
+        IQueryProvider IQueryable.Provider { get; } = new MyQbservableQueryableProvider();
     }
 
     internal class MyQbservableQueryableProvider : IQbservableProvider, IQueryProvider
