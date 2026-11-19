@@ -86,8 +86,10 @@ namespace System.Reactive.Concurrency
 
         private static IScheduler Initialize(string name)
         {
+#pragma warning disable CA1863 // Cache a CompositeFormat - not worth optimizing for a should-never-happen exception.
             return PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name)
                 ?? throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
+#pragma warning restore CA1863
         }
     }
 }

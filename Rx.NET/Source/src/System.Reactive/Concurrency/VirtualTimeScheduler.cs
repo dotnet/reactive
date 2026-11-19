@@ -238,7 +238,9 @@ namespace System.Reactive.Concurrency
             }
             else
             {
+#pragma warning disable CA1863 // Cache a CompositeFormat - not worth optimizing for exceptions.
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, nameof(AdvanceTo)));
+#pragma warning restore CA1863
             }
         }
 
@@ -269,7 +271,9 @@ namespace System.Reactive.Concurrency
             }
             else
             {
+#pragma warning disable CA1863 // Cache a CompositeFormat - not worth optimizing for exceptions.
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, nameof(AdvanceBy)));
+#pragma warning restore CA1863
             }
         }
 
