@@ -27,7 +27,24 @@ namespace System.Reactive.Concurrency
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token) => new(Task.Delay(dueTime, token));
+        protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token)
+        {
+            // Task.Delay truncates TimeSpan values to whole milliseconds, so a positive
+            // sub-millisecond dueTime would become 0ms and complete immediately before the
+            // requested due time (which can cause rescheduling operators to spin). Round any
+            // positive value with a sub-millisecond remainder up to the next whole millisecond
+            // so work never executes earlier than requested.
+            if (dueTime > TimeSpan.Zero)
+            {
+                var remainder = dueTime.Ticks % TimeSpan.TicksPerMillisecond;
+                if (remainder != 0 && dueTime.Ticks <= TimeSpan.MaxValue.Ticks - TimeSpan.TicksPerMillisecond)
+                {
+                    dueTime = TimeSpan.FromTicks(dueTime.Ticks + (TimeSpan.TicksPerMillisecond - remainder));
+                }
+            }
+
+            return new(Task.Delay(dueTime, token));
+        }
 
         protected override ValueTask ScheduleAsyncCore<TState>(TState state, Func<TState, CancellationToken, ValueTask> action, CancellationToken token)
         {
