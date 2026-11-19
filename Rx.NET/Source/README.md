@@ -1,1 +1,1 @@
-To build all flavors of Rx, you will need Visual Studio 2017 with the UWP and .NET Core workloads installed.
+To build all flavors of Rx, you will need Visual Studio 2026 with the **.NET desktop development** and **WinUI application development** workloads installed. To build and run the classic UWP tests you will need to ensure that **.NET Native** is checked in the **Individual Components** section of the Visual Studio Installer.
