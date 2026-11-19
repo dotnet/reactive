@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information.
 
-using System.Reflection;
 using System.Reactive.Concurrency;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,27 +11,21 @@ namespace Tests.System.Reactive.Async;
 [TestClass]
 public sealed class TaskPoolAsyncSchedulerTests
 {
-    private static readonly MethodInfo DelayMethod = typeof(TaskPoolAsyncScheduler).GetMethod(
-        "Delay",
-        BindingFlags.Instance | BindingFlags.NonPublic)!;
-
     [TestMethod]
-    public async Task Delay_SubMillisecondDueTime_DoesNotCompleteSynchronously()
+    public async Task ScheduleAsync_SubMillisecondDueTime_DoesNotExecuteBeforeDueTime()
     {
-        var scheduler = TaskPoolAsyncScheduler.Default;
-        var delayTask = (ValueTask)DelayMethod.Invoke(scheduler, [TimeSpan.FromTicks(1), CancellationToken.None])!;
+        var tickAtScheduled = Environment.TickCount64;
+        TaskCompletionSource<long> tickAtExecutedTcs = new();
 
-        Assert.IsFalse(delayTask.IsCompleted);
-        await delayTask;
-    }
+        await TaskPoolAsyncScheduler.Default.ScheduleAsync(
+            ct =>
+            {
+                tickAtExecutedTcs.SetResult(Environment.TickCount64);
+                return ValueTask.CompletedTask;
+            },
+            TimeSpan.FromTicks(1));
 
-    [TestMethod]
-    public async Task Delay_ZeroDueTime_CompletesSynchronously()
-    {
-        var scheduler = TaskPoolAsyncScheduler.Default;
-        var delayTask = (ValueTask)DelayMethod.Invoke(scheduler, [TimeSpan.Zero, CancellationToken.None])!;
-
-        Assert.IsTrue(delayTask.IsCompleted);
-        await delayTask;
+        var tickAtExecuted = await tickAtExecutedTcs.Task;
+        Assert.AreNotEqual(tickAtScheduled, tickAtExecuted);
     }
 }

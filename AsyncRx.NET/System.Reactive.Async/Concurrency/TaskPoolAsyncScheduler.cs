@@ -29,6 +29,11 @@ namespace System.Reactive.Concurrency
 
         protected override ValueTask Delay(TimeSpan dueTime, CancellationToken token)
         {
+            // Task.Delay truncates TimeSpan values to whole milliseconds, so a positive
+            // sub-millisecond dueTime would become 0ms and complete immediately before the
+            // requested due time (which can cause rescheduling operators to spin). Round any
+            // positive value with a sub-millisecond remainder up to the next whole millisecond
+            // so work never executes earlier than requested.
             if (dueTime > TimeSpan.Zero)
             {
                 var remainder = dueTime.Ticks % TimeSpan.TicksPerMillisecond;
