@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AnalysisLevelPerformance>7.0-None</AnalysisLevelPerformance>
+    <AnalysisLevelPerformance>11.0-None</AnalysisLevelPerformance>
   </PropertyGroup>
 
   <ItemGroup>

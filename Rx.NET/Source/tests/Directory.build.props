@@ -8,8 +8,8 @@
     that enforce .NET Class Library Design Guidelines.
     -->
     <AnalysisLevelDesign>None</AnalysisLevelDesign>
-    <AnalysisLevelPerformance>7.0-None</AnalysisLevelPerformance>
-    <AnalysisLevelNaming>7.0-None</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>11.0-None</AnalysisLevelPerformance>
+    <AnalysisLevelNaming>11.0-None</AnalysisLevelNaming>
     <!--
     Diagnostics of limited value in test projects
     CA2201 - System.Exception not sufficiently specific - tests often need to work with the base Exception type.
