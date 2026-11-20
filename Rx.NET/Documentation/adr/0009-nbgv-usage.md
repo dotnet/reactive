@@ -111,7 +111,7 @@ I think this is to deal with situations like the one we get with our preview rel
 
 ## Decision
 
-Regarding the commit-derived final portion of the `AssemblyFileVersion`, we just accept that while it looks odd, we can't change it, because any `nbgv` configuration change that would fix this would then causes other, worse problems.
+Regarding the commit-derived final portion of the `AssemblyFileVersion`, we just accept that while it looks odd, we can't change it, because any `nbgv` configuration change that would fix this would then cause other, worse problems.
 
 Having got that out of the way, we move onto the main part of the decision in this ADR. We have different procedures for ongoing dev work vs release preparation.
 
