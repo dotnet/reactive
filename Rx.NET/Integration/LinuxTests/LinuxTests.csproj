@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Tests.System.Reactive</AssemblyName>
@@ -12,7 +12,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0'">
     <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
   </PropertyGroup>
 
@@ -28,8 +28,8 @@
     <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
     <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
     <PackageReference Include="xunit.v3.assert" Version="3.2.2" />
-    <PackageReference Include="System.Reactive" Version="7.0.0-preview*" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="7.0.0-preview*" />
-    <PackageReference Include="System.Reactive.Observable.Aliases" Version="7.0.0-preview*" />
+    <PackageReference Include="System.Reactive" Version="8.0.0-preview*" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="8.0.0-preview*" />
+    <PackageReference Include="System.Reactive.Observable.Aliases" Version="8.0.0-preview*" />
   </ItemGroup>
 </Project>
