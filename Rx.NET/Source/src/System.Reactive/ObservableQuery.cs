@@ -308,7 +308,7 @@ namespace System.Reactive
                 return node;
             }
 
-            private IList<Expression> VisitQbservableOperatorArguments(MethodInfo method, IEnumerable<Expression> arguments)
+            private List<Expression> VisitQbservableOperatorArguments(MethodInfo method, IEnumerable<Expression> arguments)
             {
                 //
                 // Recognize the Qbservable.When<TResult>(IQbservableProvider, QueryablePlan<TResult>[])
@@ -368,7 +368,7 @@ namespace System.Reactive
 
             private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new(() => GetMethods(typeof(Observable)));
 
-            private static MethodCallExpression FindObservableMethod(MethodInfo method, IList<Expression> arguments)
+            private static MethodCallExpression FindObservableMethod(MethodInfo method, List<Expression> arguments)
             {
                 //
                 // Where to look for the matching operator?
@@ -430,7 +430,7 @@ namespace System.Reactive
                 return type.GetTypeInfo().DeclaredMethods.Where(m => m.IsStatic && m.IsPublic).ToLookup(m => m.Name);
             }
 
-            private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[]? typeArgs)
+            private static bool ArgsMatch(MethodInfo method, List<Expression> arguments, Type[]? typeArgs)
             {
                 //
                 // Number of parameters should match. Notice we've sanitized IQbservableProvider "this"

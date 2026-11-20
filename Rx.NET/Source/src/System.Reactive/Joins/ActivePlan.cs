@@ -8,7 +8,7 @@ namespace System.Reactive.Joins
 {
     internal abstract class ActivePlan
     {
-        private readonly Dictionary<IJoinObserver, IJoinObserver> _joinObservers = [];
+        private readonly HashSet<IJoinObserver> _joinObservers = [];
 
         protected readonly Action _onCompleted;
 
@@ -21,15 +21,12 @@ namespace System.Reactive.Joins
 
         protected void AddJoinObserver(IJoinObserver joinObserver)
         {
-            if (!_joinObservers.ContainsKey(joinObserver))
-            {
-                _joinObservers.Add(joinObserver, joinObserver);
-            }
+            _joinObservers.Add(joinObserver);
         }
 
         protected void Dequeue()
         {
-            foreach (var joinObserver in _joinObservers.Values)
+            foreach (var joinObserver in _joinObservers)
             {
                 joinObserver.Dequeue();
             }

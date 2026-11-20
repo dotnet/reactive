@@ -10,6 +10,9 @@ indent_style = space
 trim_trailing_whitespace = true
 # (Please don't specify an indent_size here; that has too many unintended consequences.)
 
+rulers=100
+
+
 # Code files
 [*.{cs,csx,vb,vbx}]
 indent_size = 4

@@ -25,7 +25,7 @@ namespace System.Reactive.Analyzers.Test.Verifiers
             var configuration = Path.GetFileName(Path.GetDirectoryName(testProjectOutputDirectory));
             var rxRefUapFolder = Path.GetFullPath(Path.Combine(
                 testProjectOutputDirectory,
-                $"../../../../System.Reactive.MakeRefAssemblies/bin/{configuration}/net8.0-windows10.0.19041"));
+                $"../../../../System.Reactive.MakeRefAssemblies/bin/{configuration}/net10.0-windows10.0.19041"));
             return Path.Combine(
                 rxRefUapFolder,
                 "System.Reactive.dll");
@@ -35,8 +35,7 @@ namespace System.Reactive.Analyzers.Test.Verifiers
         private static ReferenceAssemblies CreateReferenceAssemblies()
         {
             // Make the winrt refs available.
-            return ReferenceAssemblies.Net.Net80Windows.AddPackages([
-                new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "8.0.0"),
+            return ReferenceAssemblies.Net.Net100Windows.AddPackages([
                 new PackageIdentity("Microsoft.Windows.SDK.NET.Ref", "10.0.19041.57")]);
         }
     }

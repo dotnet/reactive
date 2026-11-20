@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
             return Catch_(sources);
         }
 
-        private static IObservable<TSource> Catch_<TSource>(IEnumerable<IObservable<TSource>> sources)
+        private static Catch<TSource> Catch_<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
             return new Catch<TSource>(sources);
         }
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             return CombineLatest_(sources, res => res.ToList());
         }
 
-        private static IObservable<TResult> CombineLatest_<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
+        private static CombineLatest<TSource, TResult> CombineLatest_<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
             return new CombineLatest<TSource, TResult>(sources, resultSelector);
         }
@@ -128,7 +128,7 @@ namespace System.Reactive.Linq
             return Concat_(sources);
         }
 
-        private static IObservable<TSource> Concat_<TSource>(IEnumerable<IObservable<TSource>> sources)
+        private static Concat<TSource> Concat_<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
             return new Concat<TSource>(sources);
         }
@@ -143,7 +143,7 @@ namespace System.Reactive.Linq
             return Concat_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
-        private static IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
+        private static ConcatMany<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
         {
             return new ConcatMany<TSource>(sources);
         }
@@ -207,12 +207,12 @@ namespace System.Reactive.Linq
             return Merge_(sources.ToObservable(scheduler));
         }
 
-        private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources)
+        private static Merge<TSource>.Observables Merge_<TSource>(IObservable<IObservable<TSource>> sources)
         {
             return new Merge<TSource>.Observables(sources);
         }
 
-        private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
+        private static Merge<TSource>.ObservablesMaxConcurrency Merge_<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
             return new Merge<TSource>.ObservablesMaxConcurrency(sources, maxConcurrent);
         }
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq
             return OnErrorResumeNext_(sources);
         }
 
-        private static IObservable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IObservable<TSource>> sources)
+        private static OnErrorResumeNext<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
             return new OnErrorResumeNext<TSource>(sources);
         }
@@ -264,7 +264,7 @@ namespace System.Reactive.Linq
             return Switch_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
-        private static IObservable<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
+        private static Switch<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
         {
             return new Switch<TSource>(sources);
         }
@@ -340,7 +340,7 @@ namespace System.Reactive.Linq
             return Zip_(sources);
         }
 
-        private static IObservable<IList<TSource>> Zip_<TSource>(IEnumerable<IObservable<TSource>> sources)
+        private static Zip<TSource> Zip_<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
             return new Zip<TSource>(sources);
         }

@@ -63,12 +63,12 @@ namespace System.Reactive.Linq
     {
         #region Remotable
 
-        private static IObservable<TSource> Remotable_<TSource>(IObservable<TSource> source)
+        private static SerializableObservable<TSource> Remotable_<TSource>(IObservable<TSource> source)
         {
             return new SerializableObservable<TSource>(new RemotableObservable<TSource>(source, null));
         }
 
-        private static IObservable<TSource> Remotable_<TSource>(IObservable<TSource> source, ILease? lease)
+        private static SerializableObservable<TSource> Remotable_<TSource>(IObservable<TSource> source, ILease? lease)
         {
             return new SerializableObservable<TSource>(new RemotableObservable<TSource>(source, lease));
         }

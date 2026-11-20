@@ -58,6 +58,6 @@ namespace System.Reactive.PlatformServices
             set => _current = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        private static IPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();
+        private static CurrentPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();
     }
 }

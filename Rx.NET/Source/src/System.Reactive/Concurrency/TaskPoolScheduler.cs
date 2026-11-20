@@ -239,7 +239,7 @@ namespace System.Reactive.Concurrency
             return ScheduleSlow(state, dt, action);
         }
 
-        private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        private SlowlyScheduledWorkItem<TState> ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             return new SlowlyScheduledWorkItem<TState>(this, state, dueTime, action);
         }

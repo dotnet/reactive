@@ -169,7 +169,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private int _pendingTickCount;
-                private IDisposable? _periodic;
+                private SingleAssignmentDisposable? _periodic;
 
                 private IDisposable InvokeStart(IScheduler self)
                 {

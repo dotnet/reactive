@@ -30,7 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.103" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.115" PrivateAssets="All"/>
     
     <PackageReference
       Include="Nerdbank.GitVersioning"
@@ -72,9 +72,9 @@
 
 
   <PropertyGroup>
-    <AnalysisLevelDesign>7.0-default</AnalysisLevelDesign>
-    <AnalysisLevelNaming>7.0-all</AnalysisLevelNaming>
-    <AnalysisLevelPerformance>7.0-all</AnalysisLevelPerformance>
+    <AnalysisLevelDesign>11.0-default</AnalysisLevelDesign>
+    <AnalysisLevelNaming>11.0-all</AnalysisLevelNaming>
+    <AnalysisLevelPerformance>11.0-all</AnalysisLevelPerformance>
 
     <!-- Enable analyzers on older targets. -->
     <EnableNETAnalyzers>true</EnableNETAnalyzers>

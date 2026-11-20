@@ -27,6 +27,7 @@ namespace System.Reactive
         {
             EventInfo? e;
 
+#pragma warning disable CA1863 // Cache a CompositeFormat - not worth optimizing for exceptions.
             if (target == null)
             {
                 e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Static)
@@ -37,6 +38,7 @@ namespace System.Reactive
                 e = targetType.GetEvent(eventName, BindingFlags.Public | BindingFlags.Instance)
                     ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_INSTANCE_EVENT, eventName, targetType.FullName));
             }
+#pragma warning restore CA1863
 
             addMethod = e.GetAddMethod() ?? throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);
             removeMethod = e.GetRemoveMethod() ?? throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_REMOVE_METHOD);
@@ -77,6 +79,7 @@ namespace System.Reactive
                 throw new InvalidOperationException(Strings_Linq.EVENT_PATTERN_REQUIRES_TWO_PARAMETERS);
             }
 
+#pragma warning disable CA1863 // Cache a CompositeFormat - not worth optimizing for exceptions.
             if (!typeof(TSender).IsAssignableFrom(parameters[0].ParameterType))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.EVENT_SENDER_NOT_ASSIGNABLE, typeof(TSender).FullName));
@@ -86,6 +89,7 @@ namespace System.Reactive
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.EVENT_ARGS_NOT_ASSIGNABLE, typeof(TEventArgs).FullName));
             }
+#pragma warning restore CA1863
 
             if (invokeMethod.ReturnType != typeof(void))
             {

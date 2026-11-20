@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             return ForEachAsync_(source, x => onNext(x, checked(i++)), cancellationToken);
         }
 
-        private static Task ForEachAsync_<TSource>(IObservable<TSource> source, Action<TSource> onNext, CancellationToken cancellationToken)
+        private static Task<object?> ForEachAsync_<TSource>(IObservable<TSource> source, Action<TSource> onNext, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<object?>();
             var subscription = new SingleAssignmentDisposable();

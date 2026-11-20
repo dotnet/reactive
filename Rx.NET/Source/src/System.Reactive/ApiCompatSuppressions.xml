@@ -19,8 +19,8 @@
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Concurrency.ControlScheduler</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
@@ -37,8 +37,8 @@
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Concurrency.DispatcherScheduler</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
@@ -55,8 +55,8 @@
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.ControlObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
@@ -73,44 +73,44 @@
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.DispatcherObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.IEventPatternSource`2</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Concurrency.CoreDispatcherScheduler</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.AsyncInfoObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.CoreDispatcherObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Linq.WindowsObservable</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
     <Target>T:System.Reactive.Windows.Foundation.AsyncInfoObservableExtensions</Target>
-    <Left>ref/net8.0-windows10.0.19041/System.Reactive.dll</Left>
-    <Right>lib/net8.0-windows10.0.19041/System.Reactive.dll</Right>
+    <Left>ref/net10.0-windows10.0.19041/System.Reactive.dll</Left>
+    <Right>lib/net10.0-windows10.0.19041/System.Reactive.dll</Right>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0001</DiagnosticId>
@@ -225,15 +225,15 @@
   the various validation errors that describe differences that we must preserve for compatibility with Rx 6.0.
 
   Essentially these all arise because netstandard2.0 is a viable target for frameworks in which other targets
-  are better matches. An application that targets net8.0-windows10-0.19041, is able to use any netstandard2.0
-  library, and any of those might have been built against Rx. Since the net8.0-windows10.0.19041 target is a
+  are better matches. An application that targets net10.0-windows10-0.19041, is able to use any netstandard2.0
+  library, and any of those might have been built against Rx. Since the net10.0-windows10.0.19041 target is a
   better match for the app, that's the version of Rx that will be chosen, but it needs to be consistent with
   the netstandard2.0 one, because other libraries might have been built against that one.
 
   The analyzer seems a little aggressive in that not only does it require that targets that might be substituted
   for the netstandard2.0 target must provide the same surface area as the netstandard2.0 target, it also requires
   that they don't provide any API surface area that is not present in the netstandard2.0 target. That seems more
-  odd because it's not obvious why something might have been built against the net8.0-windows10.0.19041 target
+  odd because it's not obvious why something might have been built against the net10.0-windows10.0.19041 target
   only to find itself using the netstandard2.0 target at runtime.
 
   We mostly only have inconsistencies of the second kind. (I.e., there's almost nothing in the netstandard2.0 target

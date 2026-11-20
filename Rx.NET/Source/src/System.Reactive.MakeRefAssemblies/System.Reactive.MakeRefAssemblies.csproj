@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net10.0;net10.0-windows10.0.19041</TargetFrameworks>
     <Nullable>enable</Nullable>
 
     <!--
-    We seem to get spurious CA1812 warnings (internal class apparently never instantiated. The same code compiles
-    without warnings when built as a normal library, so this seems to be an issue with the refernce assembly build.
+    We seem to get spurious CA1812 warnings (internal class apparently never instantiated). The same code compiles
+    without warnings when built as a normal library, so this seems to be an issue with the reference assembly build.
     -->
     <NoWarn>$(NoWarn);CA1812</NoWarn>
 
@@ -90,7 +90,7 @@
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net10.0-windows'))">
     <!--<Compile Include="Platforms\Windows\Strings_WindowsThreading.Designer.cs" />-->
   </ItemGroup> 
 
@@ -103,7 +103,7 @@
     <Compile Include="..\System.Reactive\Platforms\Desktop\Linq\**\*.Remoting.cs" />
   </ItemGroup>
 
-  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net10.0-windows'))">
     <Compile Include="..\System.Reactive\Platforms\Desktop\**\*.cs" />
   </ItemGroup> -->
 

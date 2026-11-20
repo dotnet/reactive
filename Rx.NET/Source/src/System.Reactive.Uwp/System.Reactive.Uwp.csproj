@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0-windows10.0.26100.0;uap10.0.18362</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows10.0.26100.0;uap10.0.18362</TargetFrameworks>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
 
     <ImplicitUsings>enable</ImplicitUsings>

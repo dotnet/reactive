@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<EventPattern<object>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
+        private static FromEventPattern.Impl<EventHandler, object> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
             return new FromEventPattern.Impl<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
         }
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        private static FromEventPattern.Impl<TDelegate, TEventArgs> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
         }
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        private static FromEventPattern.Impl<TDelegate, TEventArgs> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
         }
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        private static FromEventPattern.Impl<TDelegate, TSender, TEventArgs> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             return new FromEventPattern.Impl<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
         }
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
+        private static FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
         {
             return new FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
         }
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<object>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<object, object, EventPattern<object>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
         }
@@ -184,7 +184,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<object, TEventArgs, EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
         }
@@ -212,7 +212,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<TSender, TEventArgs, EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
         }
@@ -244,7 +244,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<object>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<object, object, EventPattern<object>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(type, null, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
         }
@@ -272,7 +272,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<object, TEventArgs, EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
         }
@@ -300,7 +300,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
+        private static FromEventPattern.Handler<TSender, TEventArgs, EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, static (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
         }
@@ -314,7 +314,7 @@ namespace System.Reactive.Linq
 #if HAS_TRIMMABILITY_ATTRIBUTES
         [RequiresUnreferencedCode(Constants_Core.EventReflectionTrimIncompatibilityMessage)]
 #endif
-        private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object? target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
+        private static FromEventPattern.Handler<TSender, TEventArgs, TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object? target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
         {
             ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);
 
@@ -341,7 +341,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        private static FromEvent<TDelegate, TEventArgs> FromEvent_<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             return new FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
         }
@@ -360,7 +360,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        private static FromEvent<TDelegate, TEventArgs> FromEvent_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             return new FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
         }
@@ -379,7 +379,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<TEventArgs> FromEvent_<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
+        private static FromEvent<Action<TEventArgs>, TEventArgs> FromEvent_<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
         {
             return new FromEvent<Action<TEventArgs>, TEventArgs>(static h => h, addHandler, removeHandler, scheduler);
         }
@@ -398,7 +398,7 @@ namespace System.Reactive.Linq
 
         #region Implementation
 
-        private static IObservable<Unit> FromEvent_(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
+        private static FromEvent<Action, Unit> FromEvent_(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
         {
             return new FromEvent<Action, Unit>(static h => new Action(() => h(new Unit())), addHandler, removeHandler, scheduler);
         }

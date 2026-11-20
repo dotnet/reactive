@@ -110,7 +110,7 @@ namespace System.Reactive.Windows.Foundation
             });
         }
 
-        private static IObservable<Unit> ToObservable_<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress>? progress)
+        private static AsyncInfoToObservableBridge<Unit, TProgress> ToObservable_<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress>? progress)
         {
             return new AsyncInfoToObservableBridge<Unit, TProgress>(
                 source,
@@ -265,7 +265,7 @@ namespace System.Reactive.Windows.Foundation
             return source.ToObservable_(progress, true);
         }
 
-        private static IObservable<TResult> ToObservable_<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress>? progress, bool supportsMultiple)
+        private static AsyncInfoToObservableBridge<TResult, TProgress> ToObservable_<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress>? progress, bool supportsMultiple)
         {
             return new AsyncInfoToObservableBridge<TResult, TProgress>(
                 source,

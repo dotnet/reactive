@@ -48,7 +48,7 @@ namespace System.Reactive.Analyzers.Test
     /// ideal solution is for the problematic library to upgrade to Rx 7, but if that isn't
     /// possible, developers can work around this by replacing the <c>PackageReference</c>
     /// to <c>System.Reactive</c> with a <c>PackageDownload</c>, and then instructing the
-    /// compiler to reference the runtime assembly (<c>lib\net8.0-windows10.0.19401\System.Reactive.dll</c>)
+    /// compiler to reference the runtime assembly (<c>lib\net10.0-windows10.0.19401\System.Reactive.dll</c>)
     /// instead of the reference assembly that gets used with <c>PackageReference</c>. This
     /// makes the hidden UI-framework-specific types in the runtime <c>System.Reactive.dll</c>
     /// available at compile time, enabling code to continue using this sort of property.
