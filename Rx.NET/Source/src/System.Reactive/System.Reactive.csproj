@@ -9,8 +9,13 @@
     (This is necessary for it to be possible for apps that targets Windows-specific TFMs to
     use this package without a reference to the Microsoft.WindowsDesktop.App framework.)
     Consequently, we must continue to provide net472 and uap10.0.18362 targets.
+
+    We had initially planned to provide a net11.0 target to take advantage of runtime async.
+    But it turns out that the only places we actually use async and await are in test projects.
+    The Rx.NET libraries themselves currently don't use these keywords, so there is no benefit
+    to providing a net11.0 target.
     -->
-    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net8.0;net8.0-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472;uap10.0.18362;net10.0;net10.0-windows10.0.19041</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -41,17 +46,17 @@
     </ItemGroup>
   </Target>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0')) or $(TargetFramework.StartsWith('net9.0'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net10.0'))">
     <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net10.0-windows'))">
     <!--
     Note: although this will bring in the Microsoft.WindowsDesktop.App framework, this no
     longer forces this framework dependency on users of this package. That's because we control
     the nuspec file directly, and do not include that framework dependency.
     We need it here to be able to build the UI-framework-specific legacy API features that need
-    to be available at runtime for binary compatibility with Rx 6.0.1, but which we have removed
+    to be available at runtime for binary compatibility with Rx 6.1.0, but which we have removed
     from the ref assemblies so that they are not visible in the public API for Rx 7.0.0 and later. 
     -->
     <UseWPF>true</UseWPF>
@@ -88,7 +93,7 @@
 
 
   <!--
-  UI-framework-specific code for binary compatibility with Rx 6.0.1.
+  UI-framework-specific code for binary compatibility with Rx 6.1.0.
 
   Note that the reference assemblies built by System.Reactive.MakeRefAssemblies do not include these files,
   so these are not visible in the public API for Rx 7.0.0 and later, but they
@@ -96,7 +101,7 @@
   -->
 
   <!-- UWP -->
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net10.0-windows'))">
     <Compile Include="Platforms\WinRT\**\*.cs" />
 
     <Compile Update="Platforms\WinRT\Strings_PlatformServices.Designer.cs" DesignTime="True" AutoGen="True">
@@ -106,7 +111,7 @@
   </ItemGroup>
 
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('uap10.0')) or $(TargetFramework.StartsWith('net10.0-windows'))">
     <Compile Include="Platforms\Windows\**\*.cs" />
     <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx">
       <DependentUpon>Platforms\Windows\Strings_WindowsThreading.resx</DependentUpon>
@@ -121,7 +126,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net8.0-windows')) or $(TargetFramework.StartsWith('net9.0-windows'))">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.StartsWith('net10.0-windows'))">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
 
@@ -213,8 +218,8 @@
 
   <ItemGroup>
     <None Include="build\NuGet.Readme.md" Pack="true" PackagePath="\readme.md" />
-    <None Include="build\_._" PackagePath="build\net6.0;build\net6.0-windows10.0.19041" Pack="true" />
-    <None Include="build\_._" PackagePath="buildTransitive\net6.0;buildTransitive\net6.0-windows10.0.19041" Pack="true" />
+    <None Include="build\_._" PackagePath="build\net10.0;build\net10.0-windows10.0.19041" Pack="true" />
+    <None Include="build\_._" PackagePath="buildTransitive\net10.0;buildTransitive\net10.0-windows10.0.19041" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>
@@ -253,20 +258,28 @@
   </Target>
 
   <!--
-  We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the <references> section,
-  and without that we get NU5131 warnings. (I think this is only strictly necessary for package.config scenarios, but
-  Rx has a lot of users, so we'll probably break someone if we don't get this right.)
-  We use tokenization so that we can pass package metadata (which include the version number). But it turns out that
-  the various NuGet package metadata build properties we want to pass in don't get defined until quite late in the build,
-  so we need to set <NuspecProperties> in a custom target that runs just before the GenerateNuspec target.
+  We need to supply our own nuspec file, because the SDK doesn't appear to be able to populate the
+  <references> section, and without that we get NU5131 warnings. (I think this is only strictly
+  necessary for package.config scenarios, which we don't officially support, but Rx has a lot of
+  users, so we'll probably break someone if we don't get this right.)
+  We use tokenization so that we can pass package metadata (which includes the version number). But
+  it turns out that the various NuGet package metadata build properties we want to pass in (like
+  $(PackageVersion)) don't get defined until quite late in the build, so we need to set
+  <NuspecProperties> in a custom target that runs as late as possible but before they are used.
+  NuspecProperties is consumed in two places:
+    GetPackOutputItemsTask in the _GetOutputItemsFromPack target
+    PackTask in the GenerateNuspec target
+  We used to run this with BeforeTargets="GenerateNuspec" but since .NET SDK 11, that no longer
+  works, because that GetPackOutputItemsTask ends up running before us. So now we ask to run
+  directly after Nbgv's GetBuildVersion task runs - that's where the properties we need actually
+  get set.
   -->
   <PropertyGroup>
     <NuspecFile>System.Reactive.nuspec</NuspecFile>
   </PropertyGroup>
-  <Target Name="_SetNuspecProperties" BeforeTargets="GenerateNuspec">
+  <Target Name="_SetNuspecProperties" AfterTargets="GetBuildVersion">
     <PropertyGroup>
       <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);licenseExpression=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);description=$(PackageDescription);copyright=$(Copyright);tags=$(PackageTags.Split('%20'));repository=$(RepositoryUrl);commit=$(RepositoryCommit);outputpath=$(OutputPath);refassemblypath=..\System.Reactive.MakeRefAssemblies\bin\$(Configuration)\;analyzerassemblypath=..\System.Reactive.Analyzers\bin\$(Configuration)\</NuspecProperties>
     </PropertyGroup>
   </Target>
-
 </Project>

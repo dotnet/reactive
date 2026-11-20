@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!--
-    WPF is available on net8.0-windows, and although this is technically shorthand for Windows 7, that's not
+    WPF is available on net10.0-windows, and although this is technically shorthand for Windows 7, that's not
     widely understood. People often leave out the version number because they think it means no particular version.
     We don't want to force people to use a more complex TFM. Also, although Windows 7 is long out of support, there
     is one technical reason not to specify a later version: you end up deploying a quite large .winmd file if you
@@ -13,7 +13,7 @@
     we can make it work for simpler TFMs, because nothing actually requires us to use any WinRT APIs.
     -->
 
-    <TargetFrameworks>net472;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
